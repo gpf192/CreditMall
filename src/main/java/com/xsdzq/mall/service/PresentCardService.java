@@ -1,9 +1,13 @@
 package com.xsdzq.mall.service;
 
-import com.xsdzq.mall.entity.PresentCard;
+import java.util.List;
+
+import com.xsdzq.mall.entity.PresentCardEntity;
 
 public interface PresentCardService {
 
-	public void addPresentCard(PresentCard presentCard);
+	public void addPresentCard(PresentCardEntity presentCard);
+
+	public List<PresentCardEntity> getPresentCardEntities();
 
 }

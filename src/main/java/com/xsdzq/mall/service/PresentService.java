@@ -1,9 +1,13 @@
 package com.xsdzq.mall.service;
 
-import com.xsdzq.mall.entity.Present;
+import java.util.List;
+
+import com.xsdzq.mall.entity.PresentEntity;
 
 public interface PresentService {
 
-	public void addPresent(Present present);
+	public void addPresent(PresentEntity present);
+
+	public List<PresentEntity> getPresentEntities();
 
 }

@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,10 +15,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "mall_present_card")
-public class PresentCard implements Serializable {
+@EntityListeners(AuditingEntityListener.class)
+public class PresentCardEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -44,9 +51,11 @@ public class PresentCard implements Serializable {
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH }, fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "presentId", referencedColumnName = "id")
-	private Present Present;
+	private PresentEntity present;
 
 	@Column(name = "create_date")
+	@CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
 	private Date createDate;
 
 	@Column(name = "convert_date")
@@ -92,12 +101,12 @@ public class PresentCard implements Serializable {
 		this.convertStatus = convertStatus;
 	}
 
-	public Present getPresent() {
-		return Present;
+	public PresentEntity getPresent() {
+		return present;
 	}
 
-	public void setPresent(Present present) {
-		Present = present;
+	public void setPresent(PresentEntity present) {
+		this.present = present;
 	}
 
 	public Date getCreateDate() {
@@ -119,7 +128,7 @@ public class PresentCard implements Serializable {
 	@Override
 	public String toString() {
 		return "PresentCard [id=" + id + ", cardId=" + cardId + ", password=" + password + ", cardStatus=" + cardStatus
-				+ ", convertStatus=" + convertStatus + ", Present=" + Present + ", createDate=" + createDate
+				+ ", convertStatus=" + convertStatus + ", Present=" + present + ", createDate=" + createDate
 				+ ", convertDate=" + convertDate + "]";
 	}
 

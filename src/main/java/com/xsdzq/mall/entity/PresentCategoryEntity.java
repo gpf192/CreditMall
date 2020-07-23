@@ -5,18 +5,22 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "mall_present_category")
-
-public class PresentCategory implements Serializable {
+@EntityListeners(AuditingEntityListener.class)
+public class PresentCategoryEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
@@ -33,11 +37,13 @@ public class PresentCategory implements Serializable {
 	// 创建时间
 	@Column(name = "createtime")
 	@CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
 	private Date createtime;
 
 	// 修改时间
 	@Column(name = "modifytime", nullable = true)
 	@LastModifiedDate
+    @Temporal(TemporalType.TIMESTAMP)
 	private Date modifytime;
 
 	public long getId() {

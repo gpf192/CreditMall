@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,12 +17,14 @@ import javax.persistence.Table;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "mall_present")
-public class Present implements Serializable {
+@EntityListeners(AuditingEntityListener.class)
+public class PresentEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
@@ -45,17 +48,17 @@ public class Present implements Serializable {
 	private int storeNumber;
 
 	@Column(name = "convert_number")
-	private String convertNumber;
+	private int convertNumber;
 
 	@Column(name = "store_unserd")
-	private String storeUnused;
+	private int storeUnused;
 
 	@Column(name = "status")
 	private String status;
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH }, fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "categoryId", referencedColumnName = "id")
-	private PresentCategory presentCategory;
+	private PresentCategoryEntity presentCategory;
 
 	// 创建时间
 	@Column(name = "createtime")
@@ -115,19 +118,19 @@ public class Present implements Serializable {
 		this.storeNumber = storeNumber;
 	}
 
-	public String getConvertNumber() {
+	public int getConvertNumber() {
 		return convertNumber;
 	}
 
-	public void setConvertNumber(String convertNumber) {
+	public void setConvertNumber(int convertNumber) {
 		this.convertNumber = convertNumber;
 	}
 
-	public String getStoreUnused() {
+	public int getStoreUnused() {
 		return storeUnused;
 	}
 
-	public void setStoreUnused(String storeUnused) {
+	public void setStoreUnused(int storeUnused) {
 		this.storeUnused = storeUnused;
 	}
 
@@ -139,12 +142,12 @@ public class Present implements Serializable {
 		this.status = status;
 	}
 
-	public PresentCategory getPresentCategory() {
+	public PresentCategoryEntity getPresentCategory() {
 		return presentCategory;
 	}
 
 	@JsonBackReference
-	public void setPresentCategory(PresentCategory presentCategory) {
+	public void setPresentCategory(PresentCategoryEntity presentCategory) {
 		this.presentCategory = presentCategory;
 	}
 
