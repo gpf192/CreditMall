@@ -32,7 +32,10 @@ public class PresentEntity implements Serializable {
 	@Column(name = "id", unique = true)
 	private long id;
 
-	@Column(name = "name", unique = true)
+	@Column(name = "code", unique = true)
+	private String code;
+
+	@Column(name = "name")
 	private String name;
 
 	@Column(name = "face_value", precision = 2)
@@ -40,6 +43,9 @@ public class PresentEntity implements Serializable {
 
 	@Column(name = "value", precision = 2)
 	private float value;
+
+	@Column(name = "image")
+	private String image;
 
 	@Column(name = "description")
 	private String description;
@@ -78,6 +84,14 @@ public class PresentEntity implements Serializable {
 		this.id = id;
 	}
 
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -100,6 +114,14 @@ public class PresentEntity implements Serializable {
 
 	public void setValue(float value) {
 		this.value = value;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	public String getDescription() {
@@ -169,10 +191,10 @@ public class PresentEntity implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Present [id=" + id + ", name=" + name + ", faceValue=" + faceValue + ", value=" + value
-				+ ", description=" + description + ", storeNumber=" + storeNumber + ", convertNumber=" + convertNumber
-				+ ", storeUnused=" + storeUnused + ", status=" + status + ", presentCategory=" + presentCategory
-				+ ", createtime=" + createtime + ", modifytime=" + modifytime + "]";
+		return "PresentEntity [id=" + id + ", code=" + code + ", name=" + name + ", faceValue=" + faceValue + ", value="
+				+ value + ", description=" + description + ", storeNumber=" + storeNumber + ", convertNumber="
+				+ convertNumber + ", storeUnused=" + storeUnused + ", status=" + status + ", presentCategory="
+				+ presentCategory + ", createtime=" + createtime + ", modifytime=" + modifytime + "]";
 	}
 
 }
