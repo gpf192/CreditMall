@@ -20,7 +20,7 @@ public class MallUserController {
 	@PostMapping(value = "/add")
 	public Map<String, Object> addMallUser() {
 
-//mallUserService.addMallUser(mallUserEntity);
+		// mallUserService.addMallUser(mallUserEntity);
 		return GsonUtil.buildMap(0, "success", null);
 
 	}

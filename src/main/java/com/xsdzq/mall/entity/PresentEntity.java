@@ -47,6 +47,15 @@ public class PresentEntity implements Serializable {
 	@Column(name = "image")
 	private String image;
 
+	@Column(name = "big_image")
+	private String bigImage;
+
+	@Column(name = "is_hot")
+	private boolean isHot;
+
+	@Column(name = "tip")
+	private String tip;
+
 	@Column(name = "description")
 	private String description;
 
@@ -122,6 +131,30 @@ public class PresentEntity implements Serializable {
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	public String getBigImage() {
+		return bigImage;
+	}
+
+	public void setBigImage(String bigImage) {
+		this.bigImage = bigImage;
+	}
+
+	public boolean isHot() {
+		return isHot;
+	}
+
+	public void setHot(boolean isHot) {
+		this.isHot = isHot;
+	}
+
+	public String getTip() {
+		return tip;
+	}
+
+	public void setTip(String tip) {
+		this.tip = tip;
 	}
 
 	public String getDescription() {
