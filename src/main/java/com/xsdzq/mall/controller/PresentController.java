@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.xsdzq.mall.entity.PresentEntity;
+import com.xsdzq.mall.model.PresentCategorys;
 import com.xsdzq.mall.service.PresentService;
 import com.xsdzq.mall.util.GsonUtil;
 
@@ -32,14 +33,19 @@ public class PresentController {
 		presentService.addPresent(presentEntity);
 		return GsonUtil.buildMap(0, "success", null);
 	}
-	
+
 	@GetMapping("/all")
-	public  Map<String, Object> getAllPresent(){
-		
+	public Map<String, Object> getAllPresent() {
+
 		List<PresentEntity> presentEntities = presentService.getPresentEntities();
 		return GsonUtil.buildMap(0, "success", presentEntities);
 	}
-	
-	
+
+	@GetMapping("/category/all")
+	public Map<String, Object> getAllPresentCategory() {
+
+		List<PresentCategorys> presentCategoryEntities = presentService.getPresentCategoryEntities();
+		return GsonUtil.buildMap(0, "success", presentCategoryEntities);
+	}
 
 }

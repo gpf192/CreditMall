@@ -19,8 +19,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 @Entity
 @Table(name = "mall_present")
 @EntityListeners(AuditingEntityListener.class)
@@ -68,12 +66,15 @@ public class PresentEntity implements Serializable {
 	@Column(name = "store_unserd")
 	private int storeUnused;
 
+	@Column(name = "sort")
+	private int sort;
+
 	@Column(name = "status")
 	private String status;
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH }, fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "categoryId", referencedColumnName = "id")
-	private PresentCategoryEntity presentCategory;
+	private PresentCategoryEntity presentCategoryEntity;
 
 	// 创建时间
 	@Column(name = "createtime")
@@ -189,6 +190,14 @@ public class PresentEntity implements Serializable {
 		this.storeUnused = storeUnused;
 	}
 
+	public int getSort() {
+		return sort;
+	}
+
+	public void setSort(int sort) {
+		this.sort = sort;
+	}
+
 	public String getStatus() {
 		return status;
 	}
@@ -198,12 +207,11 @@ public class PresentEntity implements Serializable {
 	}
 
 	public PresentCategoryEntity getPresentCategory() {
-		return presentCategory;
+		return presentCategoryEntity;
 	}
 
-	@JsonBackReference
-	public void setPresentCategory(PresentCategoryEntity presentCategory) {
-		this.presentCategory = presentCategory;
+	public void setPresentCategory(PresentCategoryEntity presentCategoryEntity) {
+		this.presentCategoryEntity = presentCategoryEntity;
 	}
 
 	public Date getCreatetime() {
@@ -225,9 +233,10 @@ public class PresentEntity implements Serializable {
 	@Override
 	public String toString() {
 		return "PresentEntity [id=" + id + ", code=" + code + ", name=" + name + ", faceValue=" + faceValue + ", value="
-				+ value + ", description=" + description + ", storeNumber=" + storeNumber + ", convertNumber="
-				+ convertNumber + ", storeUnused=" + storeUnused + ", status=" + status + ", presentCategory="
-				+ presentCategory + ", createtime=" + createtime + ", modifytime=" + modifytime + "]";
+				+ value + ", image=" + image + ", bigImage=" + bigImage + ", isHot=" + isHot + ", tip=" + tip
+				+ ", description=" + description + ", storeNumber=" + storeNumber + ", convertNumber=" + convertNumber
+				+ ", storeUnused=" + storeUnused + ", sort=" + sort + ", status=" + status + ", presentCategory="
+				+ presentCategoryEntity + ", createtime=" + createtime + ", modifytime=" + modifytime + "]";
 	}
 
 }

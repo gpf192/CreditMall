@@ -34,16 +34,19 @@ public class PresentCategoryEntity implements Serializable {
 	@Column(name = "flag")
 	private boolean flag;
 
+	@Column(name = "sort")
+	private int sort;
+
 	// 创建时间
 	@Column(name = "createtime")
 	@CreatedDate
-    @Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date createtime;
 
 	// 修改时间
 	@Column(name = "modifytime", nullable = true)
 	@LastModifiedDate
-    @Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date modifytime;
 
 	public long getId() {
@@ -70,6 +73,14 @@ public class PresentCategoryEntity implements Serializable {
 		this.flag = flag;
 	}
 
+	public int getSort() {
+		return sort;
+	}
+
+	public void setSort(int sort) {
+		this.sort = sort;
+	}
+
 	public Date getCreatetime() {
 		return createtime;
 	}
@@ -88,8 +99,8 @@ public class PresentCategoryEntity implements Serializable {
 
 	@Override
 	public String toString() {
-		return "PresentCategory [id=" + id + ", name=" + name + ", flag=" + flag + ", createtime=" + createtime
-				+ ", modifytime=" + modifytime + "]";
+		return "PresentCategoryEntity [id=" + id + ", name=" + name + ", flag=" + flag + ", sort=" + sort
+				+ ", createtime=" + createtime + ", modifytime=" + modifytime + "]";
 	}
 
 }
