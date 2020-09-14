@@ -50,7 +50,7 @@ public class CreditRecordEntity implements Serializable {
 
 	// 积分数
 	@Column(name = "integral_number")
-	private String integralNumber;
+	private int integralNumber;
 
 	// 积分金额 这个字段保留，不需要
 	@Column(name = "value")
@@ -118,11 +118,11 @@ public class CreditRecordEntity implements Serializable {
 		this.itemCode = itemCode;
 	}
 
-	public String getIntegralNumber() {
+	public int getIntegralNumber() {
 		return integralNumber;
 	}
 
-	public void setIntegralNumber(String integralNumber) {
+	public void setIntegralNumber(int integralNumber) {
 		this.integralNumber = integralNumber;
 	}
 

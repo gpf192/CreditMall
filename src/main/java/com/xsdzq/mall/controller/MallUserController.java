@@ -47,6 +47,12 @@ public class MallUserController {
 		return GsonUtil.buildMap(0, "ok", activityNumber);
 	}
 
+	@PostMapping(value = "/exchange")
+	public Map<String, Object> exchangePrize(@RequestBody UserData userData) throws Exception {
+
+		return GsonUtil.buildMap(0, "ok", null);
+	}
+
 	@GetMapping(value = "/credit/add")
 	public Map<String, Object> addMallUser() {
 

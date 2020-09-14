@@ -63,14 +63,14 @@ public class MallUserServiceImpl implements MallUserService {
 	public void addCreditScore() {
 		// TODO Auto-generated method stub
 		// 初始化用户
-		String client_id = "100001";
-		String client_name = "李一一";
-		String mobile = "13812121313";
+		String client_id = "100002";
+		String client_name = "李二二";
+		String mobile = "13812121315";
 		String item = "新开户";
 		String item_code = "10";
-		String integral_number = "100";
+		int integral_number = 100;
 		Date date = new Date();
-		double value = 20;
+		// double value = 20;
 		String department_code = "001";
 		String department = "北三环营业部";
 
@@ -91,10 +91,17 @@ public class MallUserServiceImpl implements MallUserService {
 			owner.setMobile(mobile);
 			owner.setDepartmentEntity(departmentEntity);
 			mallUserRepository.save(owner);
+
+			MallUserInfoEntity mallUserInfoEntity = new MallUserInfoEntity();
+			mallUserInfoEntity.setMallUserEntity(owner);
+			mallUserInfoEntity.setCreditScore(0);
+			mallUserInfoEntity.setSumScore(0);
+			mallUserInfoEntity.setLevel(0);
+			mallUserInfoRepository.save(mallUserInfoEntity);
 		}
 		// 3.项目的定义是不是需要
 
-		// 写记录
+		// 4.写记录
 		String nowFlag = DateUtil.getStandardDate(new Date());
 		CreditRecordEntity creditRecordEntity = new CreditRecordEntity();
 		creditRecordEntity.setMallUserEntity(owner);
@@ -106,6 +113,13 @@ public class MallUserServiceImpl implements MallUserService {
 		creditRecordEntity.setRecordTime(new Date());
 		creditRecordEntity.setCreateTime(date);
 		creditRecordRepository.save(creditRecordEntity);
+
+		// 5.个人信息添加积分值
+
+		MallUserInfoEntity myMallUserInfoEntity = mallUserInfoRepository.findByMallUserEntity(owner);
+		myMallUserInfoEntity.setCreditScore(integral_number + myMallUserInfoEntity.getCreditScore());
+		myMallUserInfoEntity.setSumScore(integral_number + myMallUserInfoEntity.getSumScore());
+		mallUserInfoRepository.save(myMallUserInfoEntity);
 
 	}
 
