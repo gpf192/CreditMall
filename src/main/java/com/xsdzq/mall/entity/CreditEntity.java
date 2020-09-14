@@ -31,7 +31,7 @@ public class CreditEntity implements Serializable {
 	private String item;
 
 	@Column(name = "integral_number")
-	private String integralNumber;
+	private int integralNumber;
 
 	@Column(name = "value")
 	private double value;
@@ -60,11 +60,11 @@ public class CreditEntity implements Serializable {
 		this.item = item;
 	}
 
-	public String getIntegralNumber() {
+	public int getIntegralNumber() {
 		return integralNumber;
 	}
 
-	public void setIntegralNumber(String integralNumber) {
+	public void setIntegralNumber(int integralNumber) {
 		this.integralNumber = integralNumber;
 	}
 

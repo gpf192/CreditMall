@@ -56,12 +56,12 @@ public class CreditRecordEntity implements Serializable {
 	@Column(name = "value")
 	private double value;
 
-	@Column(name = "data_flag", nullable = false)
+	@Column(name = "data_flag")
 	private String dateFlag; // 每日的判断标准
 
 	// 积分生成时间
 	@Column(name = "create_time", nullable = false)
-	private Date createTime;
+	private String createTime;
 
 	@Column(name = "record_time", nullable = false)
 	private Date recordTime;
@@ -142,11 +142,11 @@ public class CreditRecordEntity implements Serializable {
 		this.dateFlag = dateFlag;
 	}
 
-	public Date getCreateTime() {
+	public String getCreateTime() {
 		return createTime;
 	}
 
-	public void setCreateTime(Date createTime) {
+	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
 

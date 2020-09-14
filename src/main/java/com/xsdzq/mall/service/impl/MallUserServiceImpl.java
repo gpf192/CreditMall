@@ -69,7 +69,7 @@ public class MallUserServiceImpl implements MallUserService {
 		String item = "新开户";
 		String item_code = "10";
 		int integral_number = 100;
-		Date date = new Date();
+		String date = "2020-09-20";
 		// double value = 20;
 		String department_code = "001";
 		String department = "北三环营业部";
