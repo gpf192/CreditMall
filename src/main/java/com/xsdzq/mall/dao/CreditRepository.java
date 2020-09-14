@@ -1,5 +1,9 @@
 package com.xsdzq.mall.dao;
 
-public interface CreditRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.xsdzq.mall.entity.CreditEntity;
+
+public interface CreditRepository extends JpaRepository<CreditEntity, Integer> {
 
 }

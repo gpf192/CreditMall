@@ -3,12 +3,16 @@ package com.xsdzq.mall.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.data.annotation.CreatedDate;
@@ -21,7 +25,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class MallUserEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id", unique = true, length = 20)
@@ -30,6 +34,9 @@ public class MallUserEntity implements Serializable {
 	// 客户号
 	@Column(name = "client_id", unique = true, nullable = false, length = 100)
 	private String clientId;
+
+	@Column(name = "client_name", nullable = true, length = 300)
+	private String clientName;
 
 	// 资金账号
 	@Column(name = "fund_account", unique = true, length = 100)
@@ -52,6 +59,10 @@ public class MallUserEntity implements Serializable {
 
 	@Column(name = "last_login_time", nullable = true, length = 200)
 	private String lastLoginTime;
+
+	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH }, fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name = "department_id", referencedColumnName = "id")
+	private DepartmentEntity departmentEntity;
 
 	// 创建时间
 	@Column(name = "createtime")
@@ -77,6 +88,14 @@ public class MallUserEntity implements Serializable {
 
 	public void setClientId(String clientId) {
 		this.clientId = clientId;
+	}
+
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
 	}
 
 	public String getFundAccount() {
@@ -133,6 +152,14 @@ public class MallUserEntity implements Serializable {
 
 	public void setLastLoginTime(String lastLoginTime) {
 		this.lastLoginTime = lastLoginTime;
+	}
+
+	public DepartmentEntity getDepartmentEntity() {
+		return departmentEntity;
+	}
+
+	public void setDepartmentEntity(DepartmentEntity departmentEntity) {
+		this.departmentEntity = departmentEntity;
 	}
 
 	public Date getCreatetime() {
