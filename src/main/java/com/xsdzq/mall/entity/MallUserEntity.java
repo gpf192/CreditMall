@@ -56,7 +56,7 @@ public class MallUserEntity implements Serializable {
 	@Column(name = "last_login_time", nullable = true, length = 200)
 	private String lastLoginTime;
 
-	@Column(name = "department_code", unique = true, length = 50)
+	@Column(name = "department_code", length = 50)
 	private String departmentCode;
 
 	@Column(name = "department_name", length = 500)
@@ -182,6 +182,15 @@ public class MallUserEntity implements Serializable {
 
 	public void setModifytime(Date modifytime) {
 		this.modifytime = modifytime;
+	}
+
+	@Override
+	public String toString() {
+		return "MallUserEntity [id=" + id + ", clientId=" + clientId + ", clientName=" + clientName + ", fundAccount="
+				+ fundAccount + ", accessToken=" + accessToken + ", password=" + password + ", mobile=" + mobile
+				+ ", appVersion=" + appVersion + ", lastOpIP=" + lastOpIP + ", lastLoginTime=" + lastLoginTime
+				+ ", departmentCode=" + departmentCode + ", departmentName=" + departmentName + ", createtime="
+				+ createtime + ", modifytime=" + modifytime + "]";
 	}
 
 }

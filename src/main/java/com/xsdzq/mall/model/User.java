@@ -11,6 +11,9 @@ public class User {
 	private String lastOpIP;
 	private String lastLoginTime;
 	private String liveUrl;
+	private String departmentCode;
+	private String departmentName;
+
 	public User() {
 		super();
 
@@ -102,11 +105,28 @@ public class User {
 		this.liveUrl = liveUrl;
 	}
 
+	public String getDepartmentCode() {
+		return departmentCode;
+	}
+
+	public void setDepartmentCode(String departmentCode) {
+		this.departmentCode = departmentCode;
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
+
 	@Override
 	public String toString() {
 		return "User [clientId=" + clientId + ", clientName=" + clientName + ", fundAccount=" + fundAccount
 				+ ", accessToken=" + accessToken + ", mobile=" + mobile + ", appVersion=" + appVersion + ", lastOpIP="
-				+ lastOpIP + ", lastLoginTime=" + lastLoginTime + ", liveUrl=" + liveUrl + "]";
+				+ lastOpIP + ", lastLoginTime=" + lastLoginTime + ", liveUrl=" + liveUrl + ", departmentCode="
+				+ departmentCode + ", departmentName=" + departmentName + "]";
 	}
 
 }

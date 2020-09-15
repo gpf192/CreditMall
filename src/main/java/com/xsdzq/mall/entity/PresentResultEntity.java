@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -18,8 +19,9 @@ import javax.persistence.Table;
 public class PresentResultEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id", unique = true, length = 20)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "credit_present_result_sequence")
+	@SequenceGenerator(name = "credit_present_result_sequence", sequenceName = "credit_present_result_sequence", allocationSize = 1)
+	@Column(name = "id")
 	private Long id;
 
 	@Column(name = "record_time", nullable = false)

@@ -15,6 +15,8 @@ public class UserUtil {
 		user.setAppVersion(userEntity.getAppVersion());
 		user.setLastOpIP(userEntity.getLastOpIP());
 		user.setLastLoginTime(userEntity.getLastLoginTime());
+		user.setDepartmentCode(userEntity.getDepartmentCode());
+		user.setDepartmentName(userEntity.getDepartmentName());
 		return user;
 	}
 
@@ -28,9 +30,11 @@ public class UserUtil {
 		userEntity.setAppVersion(user.getAppVersion());
 		userEntity.setLastOpIP(user.getLastOpIP());
 		userEntity.setLastLoginTime(user.getLastLoginTime());
+		userEntity.setDepartmentCode(user.getDepartmentCode());
+		userEntity.setDepartmentName(user.getDepartmentName());
 		return userEntity;
 	}
-	 
+
 	public static void updateUserEntityByUser(MallUserEntity userEntity, User user) {
 		userEntity.setClientId(user.getClientId());
 		userEntity.setClientName(user.getClientName());
@@ -40,8 +44,8 @@ public class UserUtil {
 		userEntity.setAppVersion(user.getAppVersion());
 		userEntity.setLastOpIP(user.getLastOpIP());
 		userEntity.setLastLoginTime(user.getLastLoginTime());
+		userEntity.setDepartmentCode(user.getDepartmentCode());
+		userEntity.setDepartmentName(user.getDepartmentName());
 	}
-	 
-	  
-	 
+
 }
