@@ -2,6 +2,8 @@ package com.xsdzq.mall.service.impl;
 
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,8 @@ import com.xsdzq.mall.util.UserUtil;
 @Transactional(readOnly = true)
 public class MallUserServiceImpl implements MallUserService {
 
+	private static final Logger log = LoggerFactory.getLogger(MallUserServiceImpl.class);
+
 	@Autowired
 	private DepartmentRepository departmentRepository;
 
@@ -38,17 +42,26 @@ public class MallUserServiceImpl implements MallUserService {
 	private CreditRecordRepository creditRecordRepository;
 
 	@Override
+	@Transactional
 	public ActivityNumber login(User user) {
 		// TODO Auto-generated method stub
-		MallUserEntity owner = mallUserRepository.findByClientId(user.getClientId());
-		if (owner == null) {
-			MallUserEntity requestUser = UserUtil.convertUserByUserEntity(user);
+		MallUserEntity requestUser = mallUserRepository.findByClientId(user.getClientId());
+		MallUserInfoEntity mallUserInfoEntity = null;
+		if (requestUser == null) {
+			requestUser = UserUtil.convertUserByUserEntity(user);
+			log.info(requestUser.toString());
 			mallUserRepository.save(requestUser);
+			mallUserInfoEntity = new MallUserInfoEntity();
+			mallUserInfoEntity.setMallUserEntity(requestUser);
+			mallUserInfoEntity.setCreditScore(0);
+			mallUserInfoEntity.setSumScore(0);
+			mallUserInfoEntity.setLevel(0);
+			mallUserInfoRepository.save(mallUserInfoEntity);
 		} else {
-			UserUtil.updateUserEntityByUser(owner, user);
-			mallUserRepository.saveAndFlush(owner);
+			mallUserInfoEntity = mallUserInfoRepository.findByMallUserEntity(requestUser);
+			UserUtil.updateUserEntityByUser(requestUser, user);
+			mallUserRepository.saveAndFlush(requestUser);
 		}
-		MallUserInfoEntity mallUserInfoEntity = mallUserInfoRepository.findByMallUserEntity(owner);
 		ActivityNumber activityNumber = new ActivityNumber();
 		activityNumber.setScoreNumber(mallUserInfoEntity.getCreditScore());
 		return activityNumber;
@@ -92,7 +105,7 @@ public class MallUserServiceImpl implements MallUserService {
 			owner.setClientId(client_id);
 			owner.setClientName(client_name);
 			owner.setMobile(mobile);
-			//owner.setDepartmentEntity(departmentEntity);
+			// owner.setDepartmentEntity(departmentEntity);
 			mallUserRepository.save(owner);
 
 			MallUserInfoEntity mallUserInfoEntity = new MallUserInfoEntity();
@@ -142,7 +155,7 @@ public class MallUserServiceImpl implements MallUserService {
 	@Override
 	public void exchangePrize(MallUserEntity mallUserEntity, String prizeId) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
