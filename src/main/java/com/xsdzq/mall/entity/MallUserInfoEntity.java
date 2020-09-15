@@ -33,11 +33,11 @@ public class MallUserInfoEntity implements Serializable {
 	private Long id;
 
 	// 总积分
-	@Column(name = "credit_score", columnDefinition = "tinyint default 0")
+	@Column(name = "credit_score")
 	private int creditScore = 0;
 
 	// 会员等级使用 历史总积分
-	@Column(name = "sum_score", columnDefinition = "tinyint default 0")
+	@Column(name = "sum_score")
 	private int sumScore = 0;
 
 	// 会员等级使用
