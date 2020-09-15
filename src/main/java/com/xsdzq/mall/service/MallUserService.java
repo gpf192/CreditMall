@@ -12,6 +12,10 @@ public interface MallUserService {
 
 	public void addMallUser(MallUserEntity mallUserEntity);
 
+	public boolean isCanExchange(MallUserEntity mallUserEntity, String prizeId);
+
+	public void exchangePrize(MallUserEntity mallUserEntity, String prizeId);
+
 	public void addCreditScore();
 
 }

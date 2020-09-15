@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.xsdzq.mall.constants.CreditRecordConst;
 import com.xsdzq.mall.dao.CreditRecordRepository;
@@ -21,6 +22,7 @@ import com.xsdzq.mall.util.DateUtil;
 import com.xsdzq.mall.util.UserUtil;
 
 @Service
+@Transactional(readOnly = true)
 public class MallUserServiceImpl implements MallUserService {
 
 	@Autowired
@@ -60,6 +62,7 @@ public class MallUserServiceImpl implements MallUserService {
 	}
 
 	@Override
+	@Transactional
 	public void addCreditScore() {
 		// TODO Auto-generated method stub
 		// 初始化用户
@@ -89,7 +92,7 @@ public class MallUserServiceImpl implements MallUserService {
 			owner.setClientId(client_id);
 			owner.setClientName(client_name);
 			owner.setMobile(mobile);
-			owner.setDepartmentEntity(departmentEntity);
+			//owner.setDepartmentEntity(departmentEntity);
 			mallUserRepository.save(owner);
 
 			MallUserInfoEntity mallUserInfoEntity = new MallUserInfoEntity();
@@ -128,6 +131,18 @@ public class MallUserServiceImpl implements MallUserService {
 		// TODO Auto-generated method stub
 		MallUserEntity mallUserEntity = mallUserRepository.findByClientId(clientId);
 		return mallUserEntity;
+	}
+
+	@Override
+	public boolean isCanExchange(MallUserEntity mallUserEntity, String prizeId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void exchangePrize(MallUserEntity mallUserEntity, String prizeId) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
