@@ -129,7 +129,7 @@ public class MallUserServiceImpl implements MallUserService {
 		creditRecordEntity.setIntegralNumber(integral_number);
 		creditRecordEntity.setDateFlag(nowFlag);
 		creditRecordEntity.setRecordTime(new Date());
-		creditRecordEntity.setCreateTime(date);
+		//creditRecordEntity.setCreateTime(date);
 		creditRecordRepository.save(creditRecordEntity);
 
 		// 5.个人信息添加积分值
