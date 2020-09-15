@@ -3,16 +3,12 @@ package com.xsdzq.mall.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.data.annotation.CreatedDate;
@@ -60,9 +56,11 @@ public class MallUserEntity implements Serializable {
 	@Column(name = "last_login_time", nullable = true, length = 200)
 	private String lastLoginTime;
 
-	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH }, fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "department_id", referencedColumnName = "id")
-	private DepartmentEntity departmentEntity;
+	@Column(name = "department_code", unique = true, length = 50)
+	private String departmentCode;
+
+	@Column(name = "department_name", length = 500)
+	private String departmentName;
 
 	// 创建时间
 	@Column(name = "createtime")
@@ -154,12 +152,20 @@ public class MallUserEntity implements Serializable {
 		this.lastLoginTime = lastLoginTime;
 	}
 
-	public DepartmentEntity getDepartmentEntity() {
-		return departmentEntity;
+	public String getDepartmentCode() {
+		return departmentCode;
 	}
 
-	public void setDepartmentEntity(DepartmentEntity departmentEntity) {
-		this.departmentEntity = departmentEntity;
+	public void setDepartmentCode(String departmentCode) {
+		this.departmentCode = departmentCode;
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
 	}
 
 	public Date getCreatetime() {
