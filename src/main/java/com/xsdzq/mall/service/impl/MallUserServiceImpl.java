@@ -114,6 +114,8 @@ public class MallUserServiceImpl implements MallUserService {
 			mallUserInfoEntity.setSumScore(0);
 			mallUserInfoEntity.setLevel(0);
 			mallUserInfoRepository.save(mallUserInfoEntity);
+		} else {
+			// update 逻辑 把部门信息同步过去
 		}
 		// 3.项目的定义是不是需要
 
