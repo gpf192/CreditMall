@@ -27,7 +27,7 @@ public class CreditRecordEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "credit_record_sequence")
-	@SequenceGenerator(name = "credit_record_sequence", sequenceName = "credit_record_sequence", allocationSize = 1)
+	@SequenceGenerator(name = "credit_record_sequence", sequenceName = "sequence_credit_record", allocationSize = 1)
 	@Column(name = "id")
 	private Long id;
 
@@ -59,9 +59,11 @@ public class CreditRecordEntity implements Serializable {
 	@Column(name = "data_flag")
 	private String dateFlag; // 每日的判断标准
 
-	// 积分生成时间
-	@Column(name = "create_time", nullable = false)
-	private String createTime;
+	@Column(name = "begin_date")
+	private String beginDate;//生效日期
+	
+	@Column(name = "end_date")
+	private String endDate;//失效日期
 
 	@Column(name = "record_time", nullable = false)
 	private Date recordTime;
@@ -142,12 +144,22 @@ public class CreditRecordEntity implements Serializable {
 		this.dateFlag = dateFlag;
 	}
 
-	public String getCreateTime() {
-		return createTime;
+	
+
+	public String getBeginDate() {
+		return beginDate;
 	}
 
-	public void setCreateTime(String createTime) {
-		this.createTime = createTime;
+	public void setBeginDate(String beginDate) {
+		this.beginDate = beginDate;
+	}
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
 	}
 
 	public Date getRecordTime() {
