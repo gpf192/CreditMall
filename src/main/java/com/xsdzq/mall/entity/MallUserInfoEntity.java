@@ -41,7 +41,7 @@ public class MallUserInfoEntity implements Serializable {
 	private int sumScore = 0;
 
 	// 会员等级使用
-	@Column(name = "level", columnDefinition = "tinyint default 0")
+	@Column(name = "user_level", columnDefinition = "tinyint default 0")
 	private int level = 0;
 
 	@OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH }, fetch = FetchType.EAGER, optional = false)
