@@ -13,10 +13,11 @@ import com.xsdzq.mall.dao.CreditRecordRepository;
 import com.xsdzq.mall.dao.DepartmentRepository;
 import com.xsdzq.mall.dao.MallUserInfoRepository;
 import com.xsdzq.mall.dao.MallUserRepository;
+import com.xsdzq.mall.dao.PresentRepository;
 import com.xsdzq.mall.entity.CreditRecordEntity;
-import com.xsdzq.mall.entity.DepartmentEntity;
 import com.xsdzq.mall.entity.MallUserEntity;
 import com.xsdzq.mall.entity.MallUserInfoEntity;
+import com.xsdzq.mall.entity.PresentEntity;
 import com.xsdzq.mall.model.ActivityNumber;
 import com.xsdzq.mall.model.User;
 import com.xsdzq.mall.service.MallUserService;
@@ -40,6 +41,9 @@ public class MallUserServiceImpl implements MallUserService {
 
 	@Autowired
 	private CreditRecordRepository creditRecordRepository;
+	
+	@Autowired
+	private PresentRepository presentRepository;
 
 	@Override
 	@Transactional
@@ -91,13 +95,13 @@ public class MallUserServiceImpl implements MallUserService {
 		String department = "北三环营业部";
 
 		// 1.部门的查找和新增
-		DepartmentEntity departmentEntity = departmentRepository.findByCode(department_code);
+		/*DepartmentEntity departmentEntity = departmentRepository.findByCode(department_code);
 		if (departmentEntity == null) {
 			departmentEntity = new DepartmentEntity();
 			departmentEntity.setCode(department_code);
 			departmentEntity.setName(department);
 			departmentRepository.save(departmentEntity);
-		}
+		}*/
 		// 2.用户的查找和新增
 		MallUserEntity owner = mallUserRepository.findByClientId(client_id);
 		if (owner == null) {
@@ -123,11 +127,14 @@ public class MallUserServiceImpl implements MallUserService {
 		String nowFlag = DateUtil.getStandardDate(new Date());
 		CreditRecordEntity creditRecordEntity = new CreditRecordEntity();
 		creditRecordEntity.setMallUserEntity(owner);
-		creditRecordEntity.setType(CreditRecordConst.ADDSCORE);
-		creditRecordEntity.setItem(item);
-		creditRecordEntity.setItemCode(item_code);
+		creditRecordEntity.setType(CreditRecordConst.REDUCESCORE);
+		//creditRecordEntity.setItem(item);
+		//creditRecordEntity.setItemCode(item_code);
+		creditRecordEntity.setReason("兑换奖品");
+		creditRecordEntity.setReasonCode("10");
 		creditRecordEntity.setIntegralNumber(integral_number);
 		creditRecordEntity.setDateFlag(nowFlag);
+		creditRecordEntity.setGroupTime("202009");
 		creditRecordEntity.setRecordTime(new Date());
 		//creditRecordEntity.setCreateTime(date);
 		creditRecordRepository.save(creditRecordEntity);
@@ -155,8 +162,9 @@ public class MallUserServiceImpl implements MallUserService {
 	}
 
 	@Override
-	public void exchangePrize(MallUserEntity mallUserEntity, String prizeId) {
+	public void exchangePrize(MallUserEntity mallUserEntity, int prizeId) {
 		// TODO Auto-generated method stub
+		PresentEntity presentEntity = presentRepository.findById((long)prizeId).get();
 
 	}
 

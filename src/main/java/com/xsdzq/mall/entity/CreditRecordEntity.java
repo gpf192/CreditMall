@@ -59,11 +59,14 @@ public class CreditRecordEntity implements Serializable {
 	@Column(name = "data_flag")
 	private String dateFlag; // 每日的判断标准
 
+	@Column(name = "group_time")
+	private String groupTime; // group by 计算 202009
+
 	@Column(name = "begin_date")
-	private String beginDate;//生效日期
-	
+	private String beginDate;// 生效日期
+
 	@Column(name = "end_date")
-	private String endDate;//失效日期
+	private String endDate;// 失效日期
 
 	@Column(name = "record_time", nullable = false)
 	private Date recordTime;
@@ -144,7 +147,13 @@ public class CreditRecordEntity implements Serializable {
 		this.dateFlag = dateFlag;
 	}
 
-	
+	public String getGroupTime() {
+		return groupTime;
+	}
+
+	public void setGroupTime(String groupTime) {
+		this.groupTime = groupTime;
+	}
 
 	public String getBeginDate() {
 		return beginDate;
