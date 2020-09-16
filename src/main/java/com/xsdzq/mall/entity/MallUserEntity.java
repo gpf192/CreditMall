@@ -46,7 +46,7 @@ public class MallUserEntity implements Serializable {
 	@Column(name = "password", nullable = true, length = 500)
 	private String password;
 
-	@Column(name = "mobile", unique = true, nullable = true, length = 12)
+	@Column(name = "mobile", nullable = true, length = 12)
 	private String mobile;
 
 	@Column(name = "app_version", nullable = true, length = 100)
