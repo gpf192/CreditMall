@@ -5,11 +5,15 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.xsdzq.mall.entity.CreditRecordEntity;
+import com.xsdzq.mall.entity.MallUserEntity;
+import com.xsdzq.mall.model.PresentResult;
 import com.xsdzq.mall.service.CreditService;
+import com.xsdzq.mall.service.TokenService;
 import com.xsdzq.mall.util.GsonUtil;
 
 @RestController
@@ -19,13 +23,22 @@ public class CreditController {
 	@Autowired
 	private CreditService creditService;
 
+	@Autowired
+	private TokenService tokenService;
+
 	@GetMapping(value = "/all")
 	public Map<String, Object> addMallUser() {
 
 		// mallUserService.addMallUser(mallUserEntity);
 		List<CreditRecordEntity> creditList = creditService.getAllCreditRecordEntities();
 		return GsonUtil.buildMap(0, "success", creditList);
+	}
 
+	@GetMapping(value = "/result")
+	public Map<String, Object> getMyPresetResult(@RequestHeader("Authorization") String token) {
+		MallUserEntity mallUserEntity = tokenService.getMallUserEntity(token);
+		PresentResult presentResult = creditService.getPresentResultEntities(mallUserEntity);
+		return GsonUtil.buildMap(0, "success", presentResult);
 	}
 
 }

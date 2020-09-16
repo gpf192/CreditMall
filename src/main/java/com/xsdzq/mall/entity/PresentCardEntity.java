@@ -44,18 +44,18 @@ public class PresentCardEntity implements Serializable {
 	private String password;
 
 	@Column(name = "card_status")
-	private String cardStatus;
+	private int cardStatus;
 
 	@Column(name = "convert_status")
-	private String convertStatus;
+	private int convertStatus;
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH }, fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "presentId", referencedColumnName = "id")
-	private PresentEntity present;
+	private PresentEntity presentEntity;
 
 	@Column(name = "create_date")
 	@CreatedDate
-    @Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date createDate;
 
 	@Column(name = "convert_date")
@@ -85,28 +85,28 @@ public class PresentCardEntity implements Serializable {
 		this.password = password;
 	}
 
-	public String getCardStatus() {
+	public int getCardStatus() {
 		return cardStatus;
 	}
 
-	public void setCardStatus(String cardStatus) {
+	public void setCardStatus(int cardStatus) {
 		this.cardStatus = cardStatus;
 	}
 
-	public String getConvertStatus() {
+	public int getConvertStatus() {
 		return convertStatus;
 	}
 
-	public void setConvertStatus(String convertStatus) {
+	public void setConvertStatus(int convertStatus) {
 		this.convertStatus = convertStatus;
 	}
 
-	public PresentEntity getPresent() {
-		return present;
+	public PresentEntity getPresentEntity() {
+		return presentEntity;
 	}
 
-	public void setPresent(PresentEntity present) {
-		this.present = present;
+	public void setPresentEntity(PresentEntity presentEntity) {
+		this.presentEntity = presentEntity;
 	}
 
 	public Date getCreateDate() {
@@ -127,9 +127,9 @@ public class PresentCardEntity implements Serializable {
 
 	@Override
 	public String toString() {
-		return "PresentCard [id=" + id + ", cardId=" + cardId + ", password=" + password + ", cardStatus=" + cardStatus
-				+ ", convertStatus=" + convertStatus + ", Present=" + present + ", createDate=" + createDate
-				+ ", convertDate=" + convertDate + "]";
+		return "PresentCardEntity [id=" + id + ", cardId=" + cardId + ", password=" + password + ", cardStatus="
+				+ cardStatus + ", convertStatus=" + convertStatus + ", presentEntity=" + presentEntity + ", createDate="
+				+ createDate + ", convertDate=" + convertDate + "]";
 	}
 
 }

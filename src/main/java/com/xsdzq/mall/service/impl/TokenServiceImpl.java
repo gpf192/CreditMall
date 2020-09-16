@@ -9,13 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.xsdzq.mall.dao.MallUserRepository;
 import com.xsdzq.mall.dao.ParamRepository;
-import com.xsdzq.mall.dao.UserRepository;
 import com.xsdzq.mall.entity.MallUserEntity;
 import com.xsdzq.mall.entity.ParamEntity;
 import com.xsdzq.mall.model.User;
 import com.xsdzq.mall.service.TokenService;
-
 
 @Service("tokenServiceImpl")
 public class TokenServiceImpl implements TokenService {
@@ -26,8 +25,8 @@ public class TokenServiceImpl implements TokenService {
 	private String key;
 
 	@Autowired
-	UserRepository userRepository;
-	
+	MallUserRepository mallUserRepository;
+
 	@Autowired
 	ParamRepository paramRepository;
 
@@ -50,14 +49,14 @@ public class TokenServiceImpl implements TokenService {
 	public MallUserEntity getMallUserEntity(String token) {
 		// TODO Auto-generated method stub
 		String clientId = JWT.decode(token).getAudience().get(0);
-		MallUserEntity mallUserEntity = userRepository.findByClientId(clientId);
+		MallUserEntity mallUserEntity = mallUserRepository.findByClientId(clientId);
 		return mallUserEntity;
 	}
 
 	@Override
 	public ParamEntity getValueByCode(String code) {
 		// TODO Auto-generated method stub
-		//ParamEntity p = paramRepository.getValueByCode(code);
+		// ParamEntity p = paramRepository.getValueByCode(code);
 		ParamEntity paramEntity = new ParamEntity();
 		return paramEntity;
 	}
@@ -66,7 +65,7 @@ public class TokenServiceImpl implements TokenService {
 	@Transactional
 	public void modifyParam(ParamEntity entity) {
 		// TODO Auto-generated method stub
-		//paramRepository.modifyParam(entity);
+		// paramRepository.modifyParam(entity);
 	}
 
 }

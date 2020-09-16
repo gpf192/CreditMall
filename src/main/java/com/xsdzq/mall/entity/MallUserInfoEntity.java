@@ -45,7 +45,7 @@ public class MallUserInfoEntity implements Serializable {
 	private int level = 0;
 
 	@OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH }, fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "mall_user_id", referencedColumnName = "id")
+	@JoinColumn(name = "mall_user_id", referencedColumnName = "client_id")
 	private MallUserEntity mallUserEntity;
 
 	// 创建时间
