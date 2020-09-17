@@ -9,7 +9,9 @@ import com.xsdzq.mall.model.PresentResult;
 public interface CreditService {
 
 	List<CreditRecordEntity> getAllCreditRecordEntities();
-	
+
+	List<CreditRecordEntity> getMallUserRecords(MallUserEntity mallUserEntity, int pageNumber, int pageSize);
+
 	PresentResult getPresentResultEntities(MallUserEntity mallUserEntity);
 
 }
