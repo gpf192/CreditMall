@@ -32,12 +32,12 @@ public class PresentCardEntity implements Serializable {
 	 * default entity id
 	 */
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "present_card_sequence")
-	@SequenceGenerator(name = "present_card_sequence", sequenceName = "present_card_sequence", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_present_card")
+	@SequenceGenerator(name = "sequence_present_card", sequenceName = "sequence_present_card", allocationSize = 1)
 	@Column(name = "id")
 	private long id;
 
-	@Column(name = "card_id")
+	@Column(name = "card_id", unique = true)
 	private String cardId;
 
 	@Column(name = "password")

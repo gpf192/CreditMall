@@ -22,8 +22,8 @@ public class PresentResultEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "credit_present_result_sequence")
-	@SequenceGenerator(name = "credit_present_result_sequence", sequenceName = "credit_present_result_sequence", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "present_result_sequence")
+	@SequenceGenerator(name = "present_result_sequence", sequenceName = "present_result_sequence", allocationSize = 1)
 	@Column(name = "id")
 	private Long id;
 
