@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.xsdzq.mall.entity.MallUserEntity;
 import com.xsdzq.mall.entity.PresentResultEntity;
 
-public interface PresentResultRepository extends JpaRepository<PresentResultEntity, Long> {
+public interface PresentResultRepository extends JpaRepository<PresentResultEntity, Long>, PresentResultSweeper {
 
 	List<PresentResultEntity> findByMallUserEntityOrderByRecordTimeDesc(MallUserEntity mallUserEntity);
 

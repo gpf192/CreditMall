@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.xsdzq.mall.entity.CreditRecordEntity;
@@ -32,6 +33,15 @@ public class CreditController {
 		// mallUserService.addMallUser(mallUserEntity);
 		List<CreditRecordEntity> creditList = creditService.getAllCreditRecordEntities();
 		return GsonUtil.buildMap(0, "success", creditList);
+	}
+
+	@GetMapping(value = "/record")
+	public Map<String, Object> getMyRecordResult(@RequestHeader("Authorization") String token,
+			@RequestParam int pageNumber, @RequestParam int pageSize) {
+		MallUserEntity mallUserEntity = tokenService.getMallUserEntity(token);
+		List<CreditRecordEntity> creditRecordEntities = creditService.getMallUserRecords(mallUserEntity, pageNumber,
+				pageSize);
+		return GsonUtil.buildMap(0, "success", creditRecordEntities);
 	}
 
 	@GetMapping(value = "/result")

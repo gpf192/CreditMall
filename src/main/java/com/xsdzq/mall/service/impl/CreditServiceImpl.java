@@ -3,6 +3,8 @@ package com.xsdzq.mall.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +13,7 @@ import com.xsdzq.mall.dao.PresentResultRepository;
 import com.xsdzq.mall.entity.CreditRecordEntity;
 import com.xsdzq.mall.entity.MallUserEntity;
 import com.xsdzq.mall.entity.PresentResultEntity;
+import com.xsdzq.mall.entity.ResultCountEntity;
 import com.xsdzq.mall.model.PresentResult;
 import com.xsdzq.mall.model.ResultNumber;
 import com.xsdzq.mall.service.CreditService;
@@ -29,6 +32,14 @@ public class CreditServiceImpl implements CreditService {
 	public List<CreditRecordEntity> getAllCreditRecordEntities() {
 		// TODO Auto-generated method stub
 		return creditRecordRepository.findAll();
+	}
+	
+	@Override
+	public List<CreditRecordEntity> getMallUserRecords(MallUserEntity mallUserEntity, int pageNumber, int pageSize) {
+		// TODO Auto-generated method stub
+		PageRequest pageable = PageRequest.of(pageNumber, pageSize);
+		Page<CreditRecordEntity> presentRecordEntities = creditRecordRepository.findByMallUserEntityOrderByRecordTimeDesc(mallUserEntity, pageable);
+		return presentRecordEntities.getContent();
 	}
 
 	@Override
@@ -50,8 +61,11 @@ public class CreditServiceImpl implements CreditService {
 		resultNumber.setUsedScore(usedScore);
 		resultNumber.setUsedValue(usedValue);
 
+		List<ResultCountEntity> resultCounts = presentResultRepository.findResultCountList(mallUserEntity);
 		presentResult.setResultNumber(resultNumber);
 		presentResult.setPresentResultList(presentResultEntities);
+		presentResult.setResultCountList(resultCounts);
+		
 		return presentResult;
 	}
 
