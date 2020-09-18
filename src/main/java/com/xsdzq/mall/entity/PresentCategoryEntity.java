@@ -9,6 +9,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -24,10 +25,14 @@ public class PresentCategoryEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id", unique = true)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_present_Category")
+	@SequenceGenerator(name = "sequence_present_Category", sequenceName = "sequence_present_Category", allocationSize = 1)
+	@Column(name = "id")
 	private long id;
 
+	@Column(name = "code", unique = true)
+	private String code;
+	
 	@Column(name = "name", unique = true)
 	private String name;
 
@@ -97,10 +102,20 @@ public class PresentCategoryEntity implements Serializable {
 		this.modifytime = modifytime;
 	}
 
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
 	@Override
 	public String toString() {
-		return "PresentCategoryEntity [id=" + id + ", name=" + name + ", flag=" + flag + ", sort=" + sort
-				+ ", createtime=" + createtime + ", modifytime=" + modifytime + "]";
+		return "PresentCategoryEntity [id=" + id + ", code=" + code + ", name=" + name + ", flag=" + flag + ", sort="
+				+ sort + ", createtime=" + createtime + ", modifytime=" + modifytime + "]";
 	}
+
+
 
 }
