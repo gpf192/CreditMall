@@ -65,7 +65,7 @@ public class PresentEntity implements Serializable {
 	@Column(name = "convert_number")
 	private int convertNumber;
 
-	@Column(name = "store_unserd")
+	@Column(name = "store_unused")
 	private int storeUnused;
 
 	@Column(name = "sort")

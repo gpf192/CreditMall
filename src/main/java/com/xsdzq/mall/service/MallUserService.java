@@ -2,6 +2,8 @@ package com.xsdzq.mall.service;
 
 import com.xsdzq.mall.entity.MallUserEntity;
 import com.xsdzq.mall.model.ActivityNumber;
+import com.xsdzq.mall.model.PreExchangePresent;
+import com.xsdzq.mall.model.PresentModelNumber;
 import com.xsdzq.mall.model.User;
 
 public interface MallUserService {
@@ -14,7 +16,9 @@ public interface MallUserService {
 
 	public boolean isCanExchange(MallUserEntity mallUserEntity, String prizeId);
 
-	public void exchangePresent(MallUserEntity mallUserEntity, int presentId);
+	public PreExchangePresent preExchangePresent(MallUserEntity mallUserEntity, int presentId);
+
+	public void exchangePresent(MallUserEntity mallUserEntity, PresentModelNumber presentModelNumber);
 
 	public void addCreditScore();
 

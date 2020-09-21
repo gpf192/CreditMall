@@ -11,10 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.xsdzq.mall.constants.CreditRecordConst;
 import com.xsdzq.mall.constants.PresentCardConst;
+import com.xsdzq.mall.constants.PresentConst;
 import com.xsdzq.mall.dao.CreditRecordRepository;
 import com.xsdzq.mall.dao.MallUserInfoRepository;
 import com.xsdzq.mall.dao.MallUserRepository;
 import com.xsdzq.mall.dao.PresentCardRepository;
+import com.xsdzq.mall.dao.PresentRecordRepository;
 import com.xsdzq.mall.dao.PresentRepository;
 import com.xsdzq.mall.dao.PresentResultRepository;
 import com.xsdzq.mall.entity.CreditRecordEntity;
@@ -22,8 +24,12 @@ import com.xsdzq.mall.entity.MallUserEntity;
 import com.xsdzq.mall.entity.MallUserInfoEntity;
 import com.xsdzq.mall.entity.PresentCardEntity;
 import com.xsdzq.mall.entity.PresentEntity;
+import com.xsdzq.mall.entity.PresentRecordEntity;
 import com.xsdzq.mall.entity.PresentResultEntity;
+import com.xsdzq.mall.exception.BusinessException;
 import com.xsdzq.mall.model.ActivityNumber;
+import com.xsdzq.mall.model.PreExchangePresent;
+import com.xsdzq.mall.model.PresentModelNumber;
 import com.xsdzq.mall.model.User;
 import com.xsdzq.mall.service.MallUserService;
 import com.xsdzq.mall.util.DateUtil;
@@ -52,6 +58,9 @@ public class MallUserServiceImpl implements MallUserService {
 
 	@Autowired
 	private PresentResultRepository presentResultRepository;
+
+	@Autowired
+	private PresentRecordRepository presentRecordRepository;
 
 	@Override
 	@Transactional
@@ -171,54 +180,134 @@ public class MallUserServiceImpl implements MallUserService {
 	}
 
 	@Override
-	@Transactional
-	public void exchangePresent(MallUserEntity mallUserEntity, int presentId) {
+	public PreExchangePresent preExchangePresent(MallUserEntity mallUserEntity, int presentId) {
 		// TODO Auto-generated method stub
-		// 1.查询出奖品
-		Date nowDate = new Date();
+		// 查询当日兑换情况
+		Date date = new Date();
+		String nowDate = DateUtil.getStandardDate(date);
+		double canUsedValue = getCurrentDayValue(mallUserEntity, nowDate);
+		MallUserInfoEntity mallUserInfoEntity = mallUserInfoRepository.findByMallUserEntity(mallUserEntity);
 		PresentEntity presentEntity = presentRepository.findById((long) presentId).get();
-		// 2.查询出未兑换的cardList
+		log.info("canUsedValue: " + canUsedValue);
+		PreExchangePresent preExchangePresent = new PreExchangePresent();
+		preExchangePresent.setMallUserInfoEntity(mallUserInfoEntity);
+		preExchangePresent.setPresentEntity(presentEntity);
+		preExchangePresent.setCanUsedValue(canUsedValue);
+		return preExchangePresent;
+
+	}
+
+	@Override
+	@Transactional
+	public void exchangePresent(MallUserEntity mallUserEntity, PresentModelNumber presentModelNumber) {
+		// TODO Auto-generated method stub
+
+		int presentId = presentModelNumber.getPresentId();
+		// 兑换奖品数
+		int prizeNumber = presentModelNumber.getPrizeNumber();
+
+		// 查询出奖品
+		PresentEntity presentEntity = presentRepository.findById((long) presentId).get();
+
+		Date nowDate = new Date();
+		String nowDateStr = DateUtil.getStandardDate(nowDate);
+
+		// 0.兑换条件检测
+		checkExchangePresent(mallUserEntity, presentEntity, nowDateStr, prizeNumber);
+
+		// 1.查询出未兑换的cardList
 		List<PresentCardEntity> presentCardList = presentCardRepository
 				.findByPresentEntityAndConvertStatus(presentEntity, PresentCardConst.CARD_UNUSED);
-		if (presentCardList.size() > 0) {
-			// 可以兑换 暂定一个
-			PresentCardEntity presentCardEntity = presentCardList.get(0);
-			int score = (int) (presentEntity.getValue() * 100);
-
+		if (presentCardList.size() > prizeNumber) {
+			int sumScore = (int) (presentEntity.getValue() * 100 * prizeNumber);
 			// 兑换
 			// a.用户减少积分
 			MallUserInfoEntity mallUserInfoEntity = mallUserInfoRepository.findByMallUserEntity(mallUserEntity);
-			mallUserInfoEntity.setCreditScore(mallUserInfoEntity.getCreditScore() - score);
-			// b.添加creditRecord
-			CreditRecordEntity creditRecordEntity = new CreditRecordEntity();
-			creditRecordEntity.setType(CreditRecordConst.REDUCESCORE);
-			creditRecordEntity.setReasonCode(CreditRecordConst.EXCHANGECARD);
-			creditRecordEntity.setReason(CreditRecordConst.EXCHANGECARDREASON);
-			creditRecordEntity.setItem(presentEntity.getName());
-			creditRecordEntity.setIntegralNumber(score);
-			creditRecordEntity.setDateFlag(DateUtil.getStandardDate(nowDate));
-			creditRecordEntity.setGroupTime(DateUtil.getStandardMonthDate(nowDate));
-			creditRecordEntity.setRecordTime(nowDate);
-			creditRecordEntity.setMallUserEntity(mallUserEntity);
+			mallUserInfoEntity.setCreditScore(mallUserInfoEntity.getCreditScore() - sumScore);
+			mallUserInfoRepository.save(mallUserInfoEntity);
+
+			// b.循环插记录
+			int score = (int) (presentEntity.getValue() * 100);
+			for (int i = 0; i < prizeNumber; i++) {
+				PresentCardEntity presentCardEntity = presentCardList.get(i);
+				// b1.添加creditRecord
+				CreditRecordEntity creditRecordEntity = new CreditRecordEntity();
+				creditRecordEntity.setType(CreditRecordConst.REDUCESCORE);
+				creditRecordEntity.setReasonCode(CreditRecordConst.EXCHANGECARD);
+				creditRecordEntity.setReason(CreditRecordConst.EXCHANGECARDREASON);
+				creditRecordEntity.setItem(presentEntity.getName());
+				creditRecordEntity.setIntegralNumber(score);
+				creditRecordEntity.setDateFlag(nowDateStr);
+				creditRecordEntity.setGroupTime(DateUtil.getStandardMonthDate(nowDate));
+				creditRecordEntity.setRecordTime(nowDate);
+				creditRecordEntity.setMallUserEntity(mallUserEntity);
+				creditRecordRepository.save(creditRecordEntity);
+
+				presentCardEntity.setConvertStatus(PresentCardConst.CARD_USED);
+				presentCardRepository.save(presentCardEntity);
+
+				// 奖品结果页面
+				PresentRecordEntity presentRecordEntity = new PresentRecordEntity();
+				presentRecordEntity.setIntegralNumber(score);
+				presentRecordEntity.setPrice(presentEntity.getValue());
+				presentRecordEntity.setNumber(1);
+				presentRecordEntity.setDateFlag(nowDateStr);
+				presentRecordEntity.setMallUserEntity(mallUserEntity);
+				presentRecordEntity.setPresentCardEntity(presentCardEntity);
+				presentRecordEntity.setRecordTime(nowDate);
+
+				presentRecordRepository.save(presentRecordEntity);
+
+			}
+
 			// c.插入结果
 			PresentResultEntity presentResultEntity = new PresentResultEntity();
-			presentResultEntity.setIntegralNumber(score);
-			presentResultEntity.setValue(presentEntity.getValue());
+			presentResultEntity.setIntegralNumber(sumScore);
+			presentResultEntity.setValue(presentEntity.getValue() * prizeNumber);
+			presentResultEntity.setChangeNumber(prizeNumber);
 			presentResultEntity.setMallUserEntity(mallUserEntity);
-			presentResultEntity.setPresentCardEntity(presentCardEntity);
+			presentResultEntity.setPresentEntity(presentEntity);
 			presentResultEntity.setDateFlag(DateUtil.getStandardDate(nowDate));
 			presentResultEntity.setGroupTime(DateUtil.getStandardMonthDate(nowDate));
 			presentResultEntity.setRecordTime(nowDate);
-			// d.更新兑换状态
-			presentCardEntity.setConvertStatus(PresentCardConst.CARD_USED);
-
-			// e.全部更新数据库
-			presentCardRepository.save(presentCardEntity);
-			mallUserInfoRepository.save(mallUserInfoEntity);
-			creditRecordRepository.save(creditRecordEntity);
+			// d.更新结果
 			presentResultRepository.save(presentResultEntity);
 
+			presentEntity.setStoreUnused(presentEntity.getStoreUnused() - prizeNumber);
+			presentEntity.setConvertNumber(presentEntity.getConvertNumber() + prizeNumber);
+
+			// 更新库存 和使用量
+			presentRepository.save(presentEntity);
+
+		} else {
+			throw new BusinessException("库存不足，请选择其他商品！");
 		}
+
+	}
+
+	public void checkExchangePresent(MallUserEntity mallUserEntity, PresentEntity presentEntity, String nowDate,
+			int prizeNumber) {
+		// 1.检查库存
+		if (presentEntity.getStoreUnused() < prizeNumber) {
+			throw new BusinessException("库存不足，请选择其他商品！");
+		}
+		// 2.检查是否能够兑换
+		double currentValue = getCurrentDayValue(mallUserEntity, nowDate);
+		if (currentValue < presentEntity.getValue() * prizeNumber) {
+			throw new BusinessException("积分不足，总金额超过最大积分价值！");
+		}
+
+	}
+
+	public double getCurrentDayValue(MallUserEntity mallUserEntity, String nowDate) {
+		// TODO Auto-generated method stub
+		List<PresentResultEntity> myPresentResultEntities = presentResultRepository
+				.findByMallUserEntityAndDateFlagOrderByRecordTimeDesc(mallUserEntity, nowDate);
+		double usedValue = 0;
+		for (PresentResultEntity presentResultEntity : myPresentResultEntities) {
+			usedValue += presentResultEntity.getValue();
+		}
+		return PresentConst.QUOTANUMBER - usedValue;
 
 	}
 
