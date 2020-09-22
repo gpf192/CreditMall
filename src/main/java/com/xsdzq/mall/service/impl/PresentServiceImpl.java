@@ -48,7 +48,7 @@ public class PresentServiceImpl implements PresentService {
 			PresentCategorys presentCategorys = new PresentCategorys();
 			presentCategorys.setId(presentCategoryEntity.getId());
 			presentCategorys.setName(presentCategoryEntity.getName());
-			presentCategorys.setFlag(presentCategoryEntity.isFlag());
+			//presentCategorys.setFlag(presentCategoryEntity.isFlag());
 			presentCategorys.setSort(presentCategoryEntity.getSort());
 			List<PresentEntity> presentEntities = presentRepository.findByPresentCategoryEntity(presentCategoryEntity);
 			presentCategorys.setPresentEntities(presentEntities);

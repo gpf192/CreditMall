@@ -29,7 +29,7 @@ public class PresentCategoryServiceImpl implements PresentCategoryService {
 
 		PresentCategoryEntity presentCategoryEntity = new PresentCategoryEntity();
 		presentCategoryEntity.setName(presentCategory.getName());
-		presentCategoryEntity.setFlag(presentCategory.isFlag());
+		//presentCategoryEntity.setFlag(presentCategory.isFlag());
 		presentCategoryRepository.save(presentCategoryEntity);
 	}
 
