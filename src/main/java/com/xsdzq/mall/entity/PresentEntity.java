@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -43,7 +44,8 @@ public class PresentEntity implements Serializable {
 
 	@Column(name = "value", precision = 2)
 	private float value;
-
+	
+	@Lob
 	@Column(name = "image")
 	private String image;
 

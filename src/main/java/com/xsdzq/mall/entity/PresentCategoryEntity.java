@@ -37,7 +37,7 @@ public class PresentCategoryEntity implements Serializable {
 	private String name;
 
 	@Column(name = "flag")
-	private boolean flag;
+	private String flag;
 
 	@Column(name = "sort")
 	private int sort;
@@ -70,11 +70,11 @@ public class PresentCategoryEntity implements Serializable {
 		this.name = name;
 	}
 
-	public boolean isFlag() {
+	public String isFlag() {
 		return flag;
 	}
 
-	public void setFlag(boolean flag) {
+	public void setFlag(String flag) {
 		this.flag = flag;
 	}
 
