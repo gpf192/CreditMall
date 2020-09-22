@@ -52,8 +52,8 @@ public class PresentResultEntity implements Serializable {
 	private MallUserEntity mallUserEntity;
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH }, fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "card_id", referencedColumnName = "id")
-	private PresentCardEntity presentCardEntity;
+	@JoinColumn(name = "present_id", referencedColumnName = "id")
+	private PresentEntity presentEntity;
 
 	public Long getId() {
 		return id;
@@ -119,12 +119,12 @@ public class PresentResultEntity implements Serializable {
 		this.mallUserEntity = mallUserEntity;
 	}
 
-	public PresentCardEntity getPresentCardEntity() {
-		return presentCardEntity;
+	public PresentEntity getPresentEntity() {
+		return presentEntity;
 	}
 
-	public void setPresentCardEntity(PresentCardEntity presentCardEntity) {
-		this.presentCardEntity = presentCardEntity;
+	public void setPresentEntity(PresentEntity presentEntity) {
+		this.presentEntity = presentEntity;
 	}
 
 }

@@ -28,27 +28,29 @@ public class PresentRecordEntity {
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "type", nullable = false)
-	private boolean type; // type 为0 表示减少 reason 以0开头 0X， 为1表示增加 reason 以1开头 1X
-
-	@Column(name = "reason", nullable = false)
-	private String reason;
-
 	@Column(name = "num", nullable = false)
-	private Integer number = 0; // 增加或者减少的数量,默认为0
+	private Integer number = 0; //
+
+	// 兑换时使用的积分
+	@Column(name = "integral_number")
+	private int integralNumber;
 
 	@Column(name = "price")
-	private float price;
+	private double price;
 
 	@Column(name = "data_flag", nullable = false)
 	private String dateFlag; // 每日的判断标准
 
-	@Column(name = "record_time", nullable = false)
-	private Date recordTime;
-
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH }, fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "client_id", referencedColumnName = "client_id")
 	private MallUserEntity mallUserEntity;
+
+	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH }, fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name = "card_id", referencedColumnName = "id")
+	private PresentCardEntity presentCardEntity;
+
+	@Column(name = "record_time", nullable = false)
+	private Date recordTime;
 
 	public Long getId() {
 		return id;
@@ -56,22 +58,6 @@ public class PresentRecordEntity {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public boolean isType() {
-		return type;
-	}
-
-	public void setType(boolean type) {
-		this.type = type;
-	}
-
-	public String getReason() {
-		return reason;
-	}
-
-	public void setReason(String reason) {
-		this.reason = reason;
 	}
 
 	public Integer getNumber() {
@@ -82,11 +68,19 @@ public class PresentRecordEntity {
 		this.number = number;
 	}
 
-	public float getPrice() {
+	public int getIntegralNumber() {
+		return integralNumber;
+	}
+
+	public void setIntegralNumber(int integralNumber) {
+		this.integralNumber = integralNumber;
+	}
+
+	public double getPrice() {
 		return price;
 	}
 
-	public void setPrice(float price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 
@@ -98,14 +92,6 @@ public class PresentRecordEntity {
 		this.dateFlag = dateFlag;
 	}
 
-	public Date getRecordTime() {
-		return recordTime;
-	}
-
-	public void setRecordTime(Date recordTime) {
-		this.recordTime = recordTime;
-	}
-
 	public MallUserEntity getMallUserEntity() {
 		return mallUserEntity;
 	}
@@ -114,10 +100,20 @@ public class PresentRecordEntity {
 		this.mallUserEntity = mallUserEntity;
 	}
 
-	@Override
-	public String toString() {
-		return "PresentRecord [id=" + id + ", type=" + type + ", reason=" + reason + ", number=" + number
-				+ ", dateFlag=" + dateFlag + ", recordTime=" + recordTime + ", mallUserEntity=" + mallUserEntity + "]";
+	public PresentCardEntity getPresentCardEntity() {
+		return presentCardEntity;
+	}
+
+	public void setPresentCardEntity(PresentCardEntity presentCardEntity) {
+		this.presentCardEntity = presentCardEntity;
+	}
+
+	public Date getRecordTime() {
+		return recordTime;
+	}
+
+	public void setRecordTime(Date recordTime) {
+		this.recordTime = recordTime;
 	}
 
 }

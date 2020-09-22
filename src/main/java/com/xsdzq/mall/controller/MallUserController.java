@@ -16,7 +16,9 @@ import com.alibaba.fastjson.JSON;
 import com.xsdzq.mall.annotation.UserLoginToken;
 import com.xsdzq.mall.entity.MallUserEntity;
 import com.xsdzq.mall.model.ActivityNumber;
+import com.xsdzq.mall.model.PreExchangePresent;
 import com.xsdzq.mall.model.PresentModel;
+import com.xsdzq.mall.model.PresentModelNumber;
 import com.xsdzq.mall.model.User;
 import com.xsdzq.mall.model.UserData;
 import com.xsdzq.mall.service.MallUserService;
@@ -50,13 +52,25 @@ public class MallUserController {
 		return GsonUtil.buildMap(0, "ok", activityNumber);
 	}
 
+	@PostMapping(value = "/preExchange")
+	@UserLoginToken
+	public Map<String, Object> preExchange(@RequestHeader("Authorization") String token,
+			@RequestBody PresentModel presentModel) {
+
+		MallUserEntity mallUserEntity = tokenService.getMallUserEntity(token);
+		log.info("getPresentId: " + presentModel.getPresentId());
+		PreExchangePresent preExchangePresent = mallUserService.preExchangePresent(mallUserEntity,
+				presentModel.getPresentId());
+		return GsonUtil.buildMap(0, "ok", preExchangePresent);
+	}
+
 	@PostMapping(value = "/exchange")
 	@UserLoginToken
 	public Map<String, Object> exchangePrize(@RequestHeader("Authorization") String token,
-			@RequestBody PresentModel presentModel) {
+			@RequestBody PresentModelNumber presentModelNumber) {
 		MallUserEntity mallUserEntity = tokenService.getMallUserEntity(token);
-		log.info("getPresentId: " + presentModel.getPresentId());
-		mallUserService.exchangePresent(mallUserEntity, presentModel.getPresentId());
+		log.info("getPresentId: " + presentModelNumber.getPresentId());
+		mallUserService.exchangePresent(mallUserEntity, presentModelNumber);
 		return GsonUtil.buildMap(0, "ok", null);
 	}
 

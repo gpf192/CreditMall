@@ -11,4 +11,7 @@ public interface PresentResultRepository extends JpaRepository<PresentResultEnti
 
 	List<PresentResultEntity> findByMallUserEntityOrderByRecordTimeDesc(MallUserEntity mallUserEntity);
 
+	List<PresentResultEntity> findByMallUserEntityAndDateFlagOrderByRecordTimeDesc(MallUserEntity mallUserEntity,
+			String dateFlag);
+
 }
