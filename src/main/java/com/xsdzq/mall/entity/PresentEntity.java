@@ -64,7 +64,7 @@ public class PresentEntity implements Serializable {
 
 	@Lob
 	@Column(name = "explain2", nullable = true)
-	private String explain2;
+	private String explain;
 
 	@Column(name = "store_number")
 	private int storeNumber;
@@ -175,12 +175,12 @@ public class PresentEntity implements Serializable {
 		this.description = description;
 	}
 
-	public String getExplain2() {
-		return explain2;
+	public String getExplain() {
+		return explain;
 	}
 
-	public void setExplain2(String explain2) {
-		this.explain2 = explain2;
+	public void setExplain(String explain) {
+		this.explain = explain;
 	}
 
 	public int getStoreNumber() {
