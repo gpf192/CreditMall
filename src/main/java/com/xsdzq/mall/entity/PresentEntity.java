@@ -58,11 +58,13 @@ public class PresentEntity implements Serializable {
 	@Column(name = "tip")
 	private String tip;
 
-	@Column(name = "description", length = 2000)
+	@Lob
+	@Column(name = "description")
 	private String description;
 
-	@Column(name = "explain", length = 2000)
-	private String explain;
+	@Lob
+	@Column(name = "explain2", nullable = true)
+	private String explain2;
 
 	@Column(name = "store_number")
 	private int storeNumber;
@@ -173,12 +175,12 @@ public class PresentEntity implements Serializable {
 		this.description = description;
 	}
 
-	public String getExplain() {
-		return explain;
+	public String getExplain2() {
+		return explain2;
 	}
 
-	public void setExplain(String explain) {
-		this.explain = explain;
+	public void setExplain2(String explain2) {
+		this.explain2 = explain2;
 	}
 
 	public int getStoreNumber() {
