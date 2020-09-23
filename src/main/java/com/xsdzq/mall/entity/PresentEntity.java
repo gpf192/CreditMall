@@ -44,7 +44,7 @@ public class PresentEntity implements Serializable {
 
 	@Column(name = "value", precision = 2)
 	private float value;
-	
+
 	@Lob
 	@Column(name = "image")
 	private String image;
@@ -58,8 +58,11 @@ public class PresentEntity implements Serializable {
 	@Column(name = "tip")
 	private String tip;
 
-	@Column(name = "description")
+	@Column(name = "description", length = 2000)
 	private String description;
+
+	@Column(name = "explain", length = 2000)
+	private String explain;
 
 	@Column(name = "store_number")
 	private int storeNumber;
@@ -170,6 +173,14 @@ public class PresentEntity implements Serializable {
 		this.description = description;
 	}
 
+	public String getExplain() {
+		return explain;
+	}
+
+	public void setExplain(String explain) {
+		this.explain = explain;
+	}
+
 	public int getStoreNumber() {
 		return storeNumber;
 	}
@@ -210,11 +221,11 @@ public class PresentEntity implements Serializable {
 		this.status = status;
 	}
 
-	public PresentCategoryEntity getPresentCategory() {
+	public PresentCategoryEntity getPresentCategoryEntity() {
 		return presentCategoryEntity;
 	}
 
-	public void setPresentCategory(PresentCategoryEntity presentCategoryEntity) {
+	public void setPresentCategoryEntity(PresentCategoryEntity presentCategoryEntity) {
 		this.presentCategoryEntity = presentCategoryEntity;
 	}
 
@@ -232,15 +243,6 @@ public class PresentEntity implements Serializable {
 
 	public void setModifytime(Date modifytime) {
 		this.modifytime = modifytime;
-	}
-
-	@Override
-	public String toString() {
-		return "PresentEntity [id=" + id + ", code=" + code + ", name=" + name + ", faceValue=" + faceValue + ", value="
-				+ value + ", image=" + image + ", bigImage=" + bigImage + ", isHot=" + isHot + ", tip=" + tip
-				+ ", description=" + description + ", storeNumber=" + storeNumber + ", convertNumber=" + convertNumber
-				+ ", storeUnused=" + storeUnused + ", sort=" + sort + ", status=" + status + ", presentCategory="
-				+ presentCategoryEntity + ", createtime=" + createtime + ", modifytime=" + modifytime + "]";
 	}
 
 }
