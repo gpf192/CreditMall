@@ -40,6 +40,13 @@ public class PresentController {
 		List<PresentEntity> presentEntities = presentService.getPresentEntities();
 		return GsonUtil.buildMap(0, "success", presentEntities);
 	}
+	
+	@GetMapping("/hot")
+	public Map<String, Object> getHotPresents() {
+
+		List<PresentEntity> presentEntities = presentService.getHotPresentList();
+		return GsonUtil.buildMap(0, "success", presentEntities);
+	}
 
 	@GetMapping("/category/all")
 	public Map<String, Object> getAllPresentCategory() {
@@ -47,5 +54,7 @@ public class PresentController {
 		List<PresentCategorys> presentCategoryEntities = presentService.getPresentCategoryEntities();
 		return GsonUtil.buildMap(0, "success", presentCategoryEntities);
 	}
+	
+	
 
 }

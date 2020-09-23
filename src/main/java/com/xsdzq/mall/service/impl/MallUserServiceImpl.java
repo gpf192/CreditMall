@@ -244,6 +244,7 @@ public class MallUserServiceImpl implements MallUserService {
 				creditRecordRepository.save(creditRecordEntity);
 
 				presentCardEntity.setConvertStatus(PresentCardConst.CARD_USED);
+				presentCardEntity.setConvertDate(nowDate);
 				presentCardRepository.save(presentCardEntity);
 
 				// 奖品结果页面
@@ -309,6 +310,15 @@ public class MallUserServiceImpl implements MallUserService {
 		}
 		return PresentConst.QUOTANUMBER - usedValue;
 
+	}
+
+	@Override
+	public List<PresentCardEntity> getPresentCardEntities(long resultId) {
+		// TODO Auto-generated method stub
+		PresentResultEntity presentResultEntity = presentResultRepository.findById(resultId).get();
+		List<PresentCardEntity> presentCardEntities = presentCardRepository.findByConvertDate(presentResultEntity.getRecordTime());
+		return presentCardEntities;
+		
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.xsdzq.mall.entity.CreditRecordEntity;
 import com.xsdzq.mall.entity.MallUserEntity;
+import com.xsdzq.mall.model.CreditRecordMap;
 import com.xsdzq.mall.model.PresentResult;
 
 public interface CreditService {
@@ -13,5 +14,7 @@ public interface CreditService {
 	List<CreditRecordEntity> getMallUserRecords(MallUserEntity mallUserEntity, int pageNumber, int pageSize);
 
 	PresentResult getPresentResultEntities(MallUserEntity mallUserEntity);
+
+	CreditRecordMap getUserCreditRecord(MallUserEntity mallUserEntity);
 
 }

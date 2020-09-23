@@ -10,6 +10,8 @@ public interface PresentService {
 	public void addPresent(PresentEntity present);
 
 	public List<PresentEntity> getPresentEntities();
+	
+	public List<PresentEntity> getHotPresentList();
 
 	public List<PresentCategorys> getPresentCategoryEntities();
 
