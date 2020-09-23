@@ -8,7 +8,9 @@ import com.xsdzq.mall.entity.PresentCategoryEntity;
 import com.xsdzq.mall.entity.PresentEntity;
 
 public interface PresentRepository extends JpaRepository<PresentEntity, Long> {
-	
-	List<PresentEntity> findByPresentCategoryEntity(PresentCategoryEntity presentCategoryEntity);
+
+	List<PresentEntity> findByPresentCategoryEntityOrderBySortDesc(PresentCategoryEntity presentCategoryEntity);
+
+	List<PresentEntity> findByIsHotOrderBySortDesc(boolean isHot);
 
 }

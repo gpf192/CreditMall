@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.xsdzq.mall.entity.CreditRecordEntity;
 import com.xsdzq.mall.entity.MallUserEntity;
+import com.xsdzq.mall.model.CreditRecordMap;
 import com.xsdzq.mall.model.PresentResult;
 import com.xsdzq.mall.service.CreditService;
 import com.xsdzq.mall.service.TokenService;
@@ -42,6 +43,13 @@ public class CreditController {
 		List<CreditRecordEntity> creditRecordEntities = creditService.getMallUserRecords(mallUserEntity, pageNumber,
 				pageSize);
 		return GsonUtil.buildMap(0, "success", creditRecordEntities);
+	}
+
+	@GetMapping(value = "/month")
+	public Map<String, Object> getMyMothRecordReord(@RequestHeader("Authorization") String token) {
+		MallUserEntity mallUserEntity = tokenService.getMallUserEntity(token);
+		CreditRecordMap creditRecordMap = creditService.getUserCreditRecord(mallUserEntity);
+		return GsonUtil.buildMap(0, "success", creditRecordMap);
 	}
 
 	@GetMapping(value = "/result")

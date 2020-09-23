@@ -28,8 +28,14 @@ public class PresentServiceImpl implements PresentService {
 	@Transactional
 	public void addPresent(PresentEntity present) {
 		// TODO Auto-generated method stub
-
 		presentRepository.save(present);
+
+	}
+
+	@Override
+	public List<PresentEntity> getHotPresentList() {
+		// TODO Auto-generated method stub
+		return presentRepository.findByIsHotOrderBySortDesc(true);
 
 	}
 
@@ -48,9 +54,10 @@ public class PresentServiceImpl implements PresentService {
 			PresentCategorys presentCategorys = new PresentCategorys();
 			presentCategorys.setId(presentCategoryEntity.getId());
 			presentCategorys.setName(presentCategoryEntity.getName());
-			//presentCategorys.setFlag(presentCategoryEntity.isFlag());
+			// presentCategorys.setFlag(presentCategoryEntity.isFlag());
 			presentCategorys.setSort(presentCategoryEntity.getSort());
-			List<PresentEntity> presentEntities = presentRepository.findByPresentCategoryEntity(presentCategoryEntity);
+			List<PresentEntity> presentEntities = presentRepository
+					.findByPresentCategoryEntityOrderBySortDesc(presentCategoryEntity);
 			presentCategorys.setPresentEntities(presentEntities);
 			presentCategorysList.add(presentCategorys);
 
