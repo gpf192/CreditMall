@@ -58,10 +58,12 @@ public class PresentEntity implements Serializable {
 	@Column(name = "tip")
 	private String tip;
 
-	@Column(name = "description", length = 2000)
+	@Lob
+	@Column(name = "description")
 	private String description;
 
-	@Column(name = "explain", length = 2000)
+	@Lob
+	@Column(name = "explain2", nullable = true)
 	private String explain;
 
 	@Column(name = "store_number")
