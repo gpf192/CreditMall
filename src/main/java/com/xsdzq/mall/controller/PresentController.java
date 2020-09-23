@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.xsdzq.mall.entity.PresentEntity;
+import com.xsdzq.mall.entity.PresentResultEntity;
 import com.xsdzq.mall.model.PresentCategorys;
 import com.xsdzq.mall.service.PresentService;
 import com.xsdzq.mall.util.GsonUtil;
@@ -40,6 +41,15 @@ public class PresentController {
 		List<PresentEntity> presentEntities = presentService.getPresentEntities();
 		return GsonUtil.buildMap(0, "success", presentEntities);
 	}
+	
+
+	@GetMapping("/latest")
+	public Map<String, Object> getLatestPresentResult() {
+		
+		List<PresentResultEntity> resultEntities = presentService.getLatestPresentResultEntities();
+		return GsonUtil.buildMap(0, "success", resultEntities);
+	}
+	
 	
 	@GetMapping("/hot")
 	public Map<String, Object> getHotPresents() {
