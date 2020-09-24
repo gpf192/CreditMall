@@ -12,7 +12,7 @@
 	<groupId>com.xsdzq</groupId>
 	<artifactId>CreditMall</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>CreditMall</name>
 	<description>credit mall</description>
 
@@ -53,6 +53,14 @@
 			<artifactId>gson</artifactId>
 			<version>2.8.6</version><!--$NO-MVN-MAN-VER$ -->
 		</dependency>
+		
+			<!-- Oracle驱动包 -->
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<version>11.2.0.1.0</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>

@@ -86,11 +86,11 @@ public class PresentEntity implements Serializable {
 	@Column(name = "status")
 	private String status;
 
-	@Column(name = "categoryId", insertable = false, updatable = false)
+	@Column(name = "category_id", insertable = false, updatable = false)
 	private long categoryId;
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH }, fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "categoryId", referencedColumnName = "id")
+	@JoinColumn(name = "category_id", referencedColumnName = "id")
 	private PresentCategoryEntity presentCategoryEntity;
 
 	// 创建时间
