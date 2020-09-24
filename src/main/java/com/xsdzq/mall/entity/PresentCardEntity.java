@@ -49,8 +49,9 @@ public class PresentCardEntity implements Serializable {
 	@Column(name = "convert_status")
 	private int convertStatus;
 
+
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH }, fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "presentId", referencedColumnName = "id")
+	@JoinColumn(name = "present_id", referencedColumnName = "id")
 	private PresentEntity presentEntity;
 
 	@Column(name = "create_date")
@@ -68,6 +69,7 @@ public class PresentCardEntity implements Serializable {
 	public void setId(long id) {
 		this.id = id;
 	}
+
 
 	public String getCardId() {
 		return cardId;
