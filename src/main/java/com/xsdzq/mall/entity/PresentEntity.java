@@ -81,6 +81,9 @@ public class PresentEntity implements Serializable {
 	@Column(name = "status")
 	private String status;
 
+	@Column(name = "categoryId", insertable = false, updatable = false)
+	private long categoryId;
+
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH }, fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "categoryId", referencedColumnName = "id")
 	private PresentCategoryEntity presentCategoryEntity;
@@ -221,6 +224,14 @@ public class PresentEntity implements Serializable {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public long getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(long categoryId) {
+		this.categoryId = categoryId;
 	}
 
 	public PresentCategoryEntity getPresentCategoryEntity() {
