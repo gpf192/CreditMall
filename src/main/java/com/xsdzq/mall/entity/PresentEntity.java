@@ -55,6 +55,7 @@ public class PresentEntity implements Serializable {
 	@Column(name = "is_hot")
 	private boolean isHot;
 
+	// tip 简介 description 产品介绍 explain 使用说明 attention注意事项
 	@Column(name = "tip")
 	private String tip;
 
@@ -65,6 +66,10 @@ public class PresentEntity implements Serializable {
 	@Lob
 	@Column(name = "explain2", nullable = true)
 	private String explain;
+
+	@Lob
+	@Column(name = "attention", nullable = true)
+	private String attention;
 
 	@Column(name = "store_number")
 	private int storeNumber;
@@ -154,11 +159,11 @@ public class PresentEntity implements Serializable {
 		this.bigImage = bigImage;
 	}
 
-	public boolean isHot() {
+	public boolean getIsHot() {
 		return isHot;
 	}
 
-	public void setHot(boolean isHot) {
+	public void setIsHot(boolean isHot) {
 		this.isHot = isHot;
 	}
 
@@ -184,6 +189,14 @@ public class PresentEntity implements Serializable {
 
 	public void setExplain(String explain) {
 		this.explain = explain;
+	}
+
+	public String getAttention() {
+		return attention;
+	}
+
+	public void setAttention(String attention) {
+		this.attention = attention;
 	}
 
 	public int getStoreNumber() {
