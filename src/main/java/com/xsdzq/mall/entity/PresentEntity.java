@@ -159,11 +159,11 @@ public class PresentEntity implements Serializable {
 		this.bigImage = bigImage;
 	}
 
-	public boolean isHot() {
+	public boolean getIsHot() {
 		return isHot;
 	}
 
-	public void setHot(boolean isHot) {
+	public void setIsHot(boolean isHot) {
 		this.isHot = isHot;
 	}
 
