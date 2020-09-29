@@ -16,7 +16,9 @@ import com.xsdzq.mall.entity.PresentCategoryEntity;
 import com.xsdzq.mall.entity.PresentEntity;
 import com.xsdzq.mall.entity.PresentResultEntity;
 import com.xsdzq.mall.model.PresentCategorys;
+import com.xsdzq.mall.model.PresentLatestResult;
 import com.xsdzq.mall.service.PresentService;
+import com.xsdzq.mall.util.PresentUtil;
 
 @Service
 @Transactional(readOnly = true)
@@ -27,16 +29,28 @@ public class PresentServiceImpl implements PresentService {
 
 	@Autowired
 	private PresentCategoryRepository presentCategoryRepository;
-	
+
 	@Autowired
 	private PresentResultRepository presentResultRepository;
-	
+
 	@Override
-	public List<PresentResultEntity> getLatestPresentResultEntities() {
+	public List<PresentLatestResult> getLatestPresentResultEntities() {
 		// TODO Auto-generated method stub
 		PageRequest pageable = PageRequest.of(0, 3);
 		Page<PresentResultEntity> resultPage = presentResultRepository.findByOrderByRecordTimeDesc(pageable);
-		return resultPage.getContent();
+
+		List<PresentLatestResult> presentResultList = new ArrayList<PresentLatestResult>();
+		List<PresentResultEntity> presentResultEntities = resultPage.getContent();
+		for (PresentResultEntity presentResultEntity : presentResultEntities) {
+			PresentLatestResult presentLatestResult = new PresentLatestResult();
+			String clientId = presentResultEntity.getMallUserEntity().getClientId();
+			presentLatestResult.setClientId(PresentUtil.getInstance().getSecretName(clientId));
+			presentLatestResult.setPrizeName(presentResultEntity.getPresentEntity().getName());
+			presentResultList.add(presentLatestResult);
+
+		}
+
+		return presentResultList;
 	}
 
 	@Override
@@ -79,7 +93,5 @@ public class PresentServiceImpl implements PresentService {
 		}
 		return presentCategorysList;
 	}
-
-	
 
 }

@@ -3,8 +3,8 @@ package com.xsdzq.mall.service;
 import java.util.List;
 
 import com.xsdzq.mall.entity.PresentEntity;
-import com.xsdzq.mall.entity.PresentResultEntity;
 import com.xsdzq.mall.model.PresentCategorys;
+import com.xsdzq.mall.model.PresentLatestResult;
 
 public interface PresentService {
 
@@ -14,7 +14,7 @@ public interface PresentService {
 
 	public List<PresentEntity> getHotPresentList();
 
-	public List<PresentResultEntity> getLatestPresentResultEntities();
+	public List<PresentLatestResult> getLatestPresentResultEntities();
 
 	public List<PresentCategorys> getPresentCategoryEntities();
 
