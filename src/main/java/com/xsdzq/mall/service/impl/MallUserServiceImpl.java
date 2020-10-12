@@ -218,7 +218,7 @@ public class MallUserServiceImpl implements MallUserService {
 		// 1.查询出未兑换的cardList
 		List<PresentCardEntity> presentCardList = presentCardRepository
 				.findByPresentEntityAndConvertStatus(presentEntity, PresentCardConst.CARD_UNUSED);
-		if (presentCardList.size() > prizeNumber) {
+		if (presentCardList.size() >= prizeNumber) {
 			int sumScore = (int) (presentEntity.getValue() * 100 * prizeNumber);
 			// 兑换
 			// a.用户减少积分
