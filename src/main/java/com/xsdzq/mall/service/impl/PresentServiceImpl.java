@@ -64,7 +64,7 @@ public class PresentServiceImpl implements PresentService {
 	@Override
 	public List<PresentEntity> getHotPresentList() {
 		// TODO Auto-generated method stub
-		return presentRepository.findByIsHotOrderBySortDesc(true);
+		return presentRepository.findByIsHotOrderByCreatetimeDescSortDesc(true);
 
 	}
 

@@ -11,6 +11,6 @@ public interface PresentRepository extends JpaRepository<PresentEntity, Long> {
 
 	List<PresentEntity> findByPresentCategoryEntityOrderBySortDesc(PresentCategoryEntity presentCategoryEntity);
 
-	List<PresentEntity> findByIsHotOrderBySortDesc(boolean isHot);
+	List<PresentEntity> findByIsHotOrderByCreatetimeDescSortDesc(boolean isHot);
 
 }
