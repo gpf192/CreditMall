@@ -281,7 +281,7 @@ public class MallUserServiceImpl implements MallUserService {
 			presentRepository.save(presentEntity);
 
 		} else {
-			throw new BusinessException("库存不足，请选择其他商品！");
+			throw new BusinessException("超过最大兑换数量！");
 		}
 
 	}
@@ -290,7 +290,7 @@ public class MallUserServiceImpl implements MallUserService {
 			int prizeNumber) {
 		// 1.检查库存
 		if (presentEntity.getStoreUnused() < prizeNumber) {
-			throw new BusinessException("库存不足，请选择其他商品！");
+			throw new BusinessException("超过最大兑换数量！");
 		}
 		// 2.检查是否能够兑换
 		double currentValue = getCurrentDayValue(mallUserEntity, nowDate);
