@@ -30,8 +30,8 @@ public class UserUtil {
 		userEntity.setAppVersion(user.getAppVersion());
 		userEntity.setLastOpIP(user.getLastOpIP());
 		userEntity.setLastLoginTime(user.getLastLoginTime());
-		userEntity.setDepartmentCode(user.getDepartmentCode());
-		userEntity.setDepartmentName(user.getDepartmentName());
+		//userEntity.setDepartmentCode(user.getDepartmentCode());
+		//userEntity.setDepartmentName(user.getDepartmentName());
 		return userEntity;
 	}
 
@@ -44,8 +44,8 @@ public class UserUtil {
 		userEntity.setAppVersion(user.getAppVersion());
 		userEntity.setLastOpIP(user.getLastOpIP());
 		userEntity.setLastLoginTime(user.getLastLoginTime());
-		userEntity.setDepartmentCode(user.getDepartmentCode());
-		userEntity.setDepartmentName(user.getDepartmentName());
+		//userEntity.setDepartmentCode(user.getDepartmentCode());
+		//userEntity.setDepartmentName(user.getDepartmentName());
 	}
 
 }
