@@ -97,7 +97,8 @@ public class CreditServiceImpl implements CreditService {
 		MallUserInfoEntity myMallUserInfoEntity = mallUserInfoRepository.findByMallUserEntity(mallUserEntity);
 
 		CreditRecordMap creditRecordMap = new CreditRecordMap();
-		creditRecordMap.setSumScore(myUsedSumScore);
+		//creditRecordMap.setSumScore(myUsedSumScore);
+		creditRecordMap.setSumUsedScore(myUsedSumScore);
 		creditRecordMap.setSumScore(myMallUserInfoEntity.getCreditScore());
 		creditRecordMap.setCreditRecordMonths(recordMothList);
 

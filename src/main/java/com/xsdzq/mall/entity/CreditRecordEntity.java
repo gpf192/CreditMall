@@ -18,6 +18,8 @@ import javax.persistence.Table;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "mall_credit_record")
 @EntityListeners(AuditingEntityListener.class)
@@ -179,6 +181,7 @@ public class CreditRecordEntity implements Serializable {
 		this.recordTime = recordTime;
 	}
 
+	@JsonIgnore
 	public MallUserEntity getMallUserEntity() {
 		return mallUserEntity;
 	}

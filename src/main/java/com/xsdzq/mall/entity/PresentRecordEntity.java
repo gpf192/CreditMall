@@ -17,6 +17,8 @@ import javax.persistence.Table;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "mall_present_record")
 @EntityListeners(AuditingEntityListener.class)
@@ -92,6 +94,7 @@ public class PresentRecordEntity {
 		this.dateFlag = dateFlag;
 	}
 
+	@JsonIgnore
 	public MallUserEntity getMallUserEntity() {
 		return mallUserEntity;
 	}

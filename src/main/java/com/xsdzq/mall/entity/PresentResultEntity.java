@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "mall_present_result")
 public class PresentResultEntity implements Serializable {
@@ -111,6 +113,7 @@ public class PresentResultEntity implements Serializable {
 		this.recordTime = recordTime;
 	}
 
+	@JsonIgnore
 	public MallUserEntity getMallUserEntity() {
 		return mallUserEntity;
 	}

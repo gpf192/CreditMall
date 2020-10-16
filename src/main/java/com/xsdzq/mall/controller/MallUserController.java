@@ -43,9 +43,16 @@ public class MallUserController {
 	private TokenService tokenService;
 
 	@PostMapping(value = "/login")
-	public Map<String, Object> login(@RequestBody UserData userData) throws Exception {
-		String cryptUserString = userData.getEncryptData();
-		String userString = AESUtil.decryptAES(cryptUserString);
+	public Map<String, Object> login(@RequestBody UserData userData) {
+		String cryptUserString = userData.getEncryptData().trim();
+		String userString;
+		try {
+			userString = AESUtil.decryptAES(cryptUserString);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return GsonUtil.buildMap(1, "登录失败", null);
+		}
 		log.info(userString);
 		User user = JSON.parseObject(userString, User.class);
 		ActivityNumber activityNumber = mallUserService.login(user);
