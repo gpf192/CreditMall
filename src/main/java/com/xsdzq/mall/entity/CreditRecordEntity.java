@@ -68,7 +68,7 @@ public class CreditRecordEntity implements Serializable {
 	private String beginDate;// 生效日期
 
 	@Column(name = "end_date")
-	private String endDate;// 失效日期
+	private int endDate;// 失效日期
 
 	@Column(name = "record_time", nullable = false)
 	private Date recordTime;
@@ -165,11 +165,11 @@ public class CreditRecordEntity implements Serializable {
 		this.beginDate = beginDate;
 	}
 
-	public String getEndDate() {
+	public int getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(String endDate) {
+	public void setEndDate(int endDate) {
 		this.endDate = endDate;
 	}
 
