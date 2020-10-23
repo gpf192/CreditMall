@@ -218,9 +218,9 @@ public class MallUserServiceImpl implements MallUserService {
 		// 1.查询出未兑换的cardList
 		List<PresentCardEntity> presentCardList = presentCardRepository
 				.findByPresentEntityAndConvertStatus(presentEntity, PresentCardConst.CARD_UNUSED);
+
 		if (presentCardList.size() >= prizeNumber) {
 			int sumScore = (int) (presentEntity.getValue() * 100 * prizeNumber);
-			// 兑换
 			// a.用户减少积分
 			MallUserInfoEntity mallUserInfoEntity = mallUserInfoRepository.findByMallUserEntity(mallUserEntity);
 			mallUserInfoEntity.setCreditScore(mallUserInfoEntity.getCreditScore() - sumScore);
@@ -239,6 +239,8 @@ public class MallUserServiceImpl implements MallUserService {
 				creditRecordEntity.setIntegralNumber(score);
 				creditRecordEntity.setDateFlag(nowDateStr);
 				creditRecordEntity.setGroupTime(DateUtil.getStandardMonthDate(nowDate));
+				creditRecordEntity.setChangeType(CreditRecordConst.CHANGETYPE_COMPLETE);
+				creditRecordEntity.setRemindNumer(0);
 				creditRecordEntity.setRecordTime(nowDate);
 				creditRecordEntity.setMallUserEntity(mallUserEntity);
 				creditRecordRepository.save(creditRecordEntity);
@@ -247,7 +249,7 @@ public class MallUserServiceImpl implements MallUserService {
 				presentCardEntity.setConvertDate(nowDate);
 				presentCardRepository.save(presentCardEntity);
 
-				// 奖品结果页面
+				// b2. 奖品结果页面
 				PresentRecordEntity presentRecordEntity = new PresentRecordEntity();
 				presentRecordEntity.setIntegralNumber(score);
 				presentRecordEntity.setPrice(presentEntity.getValue());
@@ -270,8 +272,7 @@ public class MallUserServiceImpl implements MallUserService {
 			presentResultEntity.setPresentEntity(presentEntity);
 			presentResultEntity.setDateFlag(DateUtil.getStandardDate(nowDate));
 			presentResultEntity.setGroupTime(DateUtil.getStandardMonthDate(nowDate));
-			presentResultEntity.setRecordTime(nowDate);
-			// d.更新结果
+			presentResultEntity.setRecordTime(nowDate); // d.更新结果
 			presentResultRepository.save(presentResultEntity);
 
 			presentEntity.setStoreUnused(presentEntity.getStoreUnused() - prizeNumber);
@@ -279,6 +280,8 @@ public class MallUserServiceImpl implements MallUserService {
 
 			// 更新库存 和使用量
 			presentRepository.save(presentEntity);
+			// e.处理扣减积分问题 //
+			handleRudeceCredit(mallUserEntity, sumScore);
 
 		} else {
 			throw new BusinessException("超过最大兑换数量！");
@@ -312,13 +315,50 @@ public class MallUserServiceImpl implements MallUserService {
 
 	}
 
+	void handleRudeceCredit(MallUserEntity mallUserEntity, int reduceScore) {
+		List<CreditRecordEntity> creditRecordEntities = creditRecordRepository
+				.findByMallUserEntityAndTypeAndChangeTypeLessThanEqualOrderByBeginDate(mallUserEntity,
+						CreditRecordConst.ADDSCORE, 1);
+		log.info("creditRecordEntities: " + creditRecordEntities.size());
+		for (CreditRecordEntity creditRecordEntity : creditRecordEntities) {
+			log.info(creditRecordEntity.toString());
+			// 做减法
+			int score;
+			if (creditRecordEntity.getChangeType() == CreditRecordConst.CHANGETYPE_UNUSED) {
+				score = creditRecordEntity.getIntegralNumber();
+			} else {
+				score = creditRecordEntity.getRemindNumer();
+			}
+			if (reduceScore - score > 0) {
+				creditRecordEntity.setChangeType(CreditRecordConst.CHANGETYPE_COMPLETE);
+				creditRecordEntity.setRemindNumer(0);
+				reduceScore = reduceScore - score;
+				creditRecordRepository.save(creditRecordEntity);
+			} else if (reduceScore - score == 0) {
+				creditRecordEntity.setChangeType(CreditRecordConst.CHANGETYPE_COMPLETE);
+				creditRecordEntity.setRemindNumer(0);
+				reduceScore = reduceScore - score;
+				creditRecordRepository.save(creditRecordEntity);
+				break;
+			} else {
+				creditRecordEntity.setChangeType(CreditRecordConst.CHANGETYPE_REMIND);
+				creditRecordEntity.setRemindNumer(score - reduceScore);
+				reduceScore = 0;
+				creditRecordRepository.save(creditRecordEntity);
+				break;
+			}
+		}
+
+	}
+
 	@Override
 	public List<PresentCardEntity> getPresentCardEntities(long resultId) {
 		// TODO Auto-generated method stub
 		PresentResultEntity presentResultEntity = presentResultRepository.findById(resultId).get();
-		List<PresentCardEntity> presentCardEntities = presentCardRepository.findByConvertDate(presentResultEntity.getRecordTime());
+		List<PresentCardEntity> presentCardEntities = presentCardRepository
+				.findByConvertDate(presentResultEntity.getRecordTime());
 		return presentCardEntities;
-		
+
 	}
 
 }

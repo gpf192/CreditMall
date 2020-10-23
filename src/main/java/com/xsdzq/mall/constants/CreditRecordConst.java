@@ -19,5 +19,12 @@ public interface CreditRecordConst {
 
 	String EXPIREDCARD = "11";
 	String EXPIREDCARDREASON = "已失效";
+	// changeType
+	// 0. 未使用 1.为兑换完成，2.兑换完成 3.已过期
+	int CHANGETYPE_UNUSED = 0;
+	int CHANGETYPE_REMIND = 1;
+	int CHANGETYPE_COMPLETE = 2;
+	int CHANGETYPE_EXPRIE = 3;
+	
 
 }

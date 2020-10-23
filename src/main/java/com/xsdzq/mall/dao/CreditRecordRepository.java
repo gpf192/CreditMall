@@ -11,9 +11,12 @@ import com.xsdzq.mall.entity.MallUserEntity;
 
 public interface CreditRecordRepository extends JpaRepository<CreditRecordEntity, Long>, CreditRecordSweeper {
 
-    List<CreditRecordEntity> findByMallUserEntityOrderByRecordTimeDesc(MallUserEntity mallUserEntity);
+	List<CreditRecordEntity> findByMallUserEntityOrderByRecordTimeDesc(MallUserEntity mallUserEntity);
 
 	Page<CreditRecordEntity> findByMallUserEntityOrderByRecordTimeDesc(MallUserEntity mallUserEntity,
 			Pageable pageable);
+
+	List<CreditRecordEntity> findByMallUserEntityAndTypeAndChangeTypeLessThanEqualOrderByBeginDate(
+			MallUserEntity mallUserEntity, Boolean type, int changeType);
 
 }

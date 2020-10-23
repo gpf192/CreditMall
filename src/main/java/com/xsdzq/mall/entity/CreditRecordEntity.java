@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -58,6 +59,13 @@ public class CreditRecordEntity implements Serializable {
 	@Column(name = "value")
 	private double value;
 
+	// 兑换类型，0，新增状态，未兑换，1.未完全兑换，2.已完成兑换
+	@Column(name = "change_type")
+	private int changeType = 0;
+
+	@Column(name = "remindNumer")
+	private int remindNumer = 0;
+
 	@Column(name = "data_flag")
 	private String dateFlag; // 每日的判断标准
 
@@ -72,6 +80,11 @@ public class CreditRecordEntity implements Serializable {
 
 	@Column(name = "record_time", nullable = false)
 	private Date recordTime;
+
+	// 修改时间
+	@Column(name = "modifytime", nullable = true)
+	@LastModifiedDate
+	private Date modifytime;
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH }, fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "client_id", referencedColumnName = "client_id")
@@ -149,6 +162,22 @@ public class CreditRecordEntity implements Serializable {
 		this.dateFlag = dateFlag;
 	}
 
+	public int getChangeType() {
+		return changeType;
+	}
+
+	public void setChangeType(int changeType) {
+		this.changeType = changeType;
+	}
+
+	public int getRemindNumer() {
+		return remindNumer;
+	}
+
+	public void setRemindNumer(int remindNumer) {
+		this.remindNumer = remindNumer;
+	}
+
 	public String getGroupTime() {
 		return groupTime;
 	}
@@ -173,6 +202,14 @@ public class CreditRecordEntity implements Serializable {
 		this.endDate = endDate;
 	}
 
+	public Date getModifytime() {
+		return modifytime;
+	}
+
+	public void setModifytime(Date modifytime) {
+		this.modifytime = modifytime;
+	}
+
 	public Date getRecordTime() {
 		return recordTime;
 	}
@@ -188,6 +225,15 @@ public class CreditRecordEntity implements Serializable {
 
 	public void setMallUserEntity(MallUserEntity mallUserEntity) {
 		this.mallUserEntity = mallUserEntity;
+	}
+
+	@Override
+	public String toString() {
+		return "CreditRecordEntity [id=" + id + ", type=" + type + ", reason=" + reason + ", reasonCode=" + reasonCode
+				+ ", item=" + item + ", itemCode=" + itemCode + ", integralNumber=" + integralNumber + ", value="
+				+ value + ", changeType=" + changeType + ", remindNumer=" + remindNumer + ", dateFlag=" + dateFlag
+				+ ", groupTime=" + groupTime + ", beginDate=" + beginDate + ", endDate=" + endDate + ", recordTime="
+				+ recordTime + ", modifytime=" + modifytime + ", mallUserEntity=" + mallUserEntity + "]";
 	}
 
 }
