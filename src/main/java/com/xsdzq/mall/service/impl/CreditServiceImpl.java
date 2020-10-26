@@ -1,4 +1,4 @@
-package com.xsdzq.mall.service.impl;
+ package com.xsdzq.mall.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;

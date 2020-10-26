@@ -59,11 +59,11 @@ public class CreditRecordEntity implements Serializable {
 	@Column(name = "value")
 	private double value;
 
-	// 兑换类型，0，新增状态，未兑换，1.未完全兑换，2.已完成兑换
+	// 兑换类型，0，新增状态，未兑换，1.未完全兑换，2.已完成兑换 
 	@Column(name = "change_type")
 	private int changeType = 0;
 
-	@Column(name = "remindNumer")
+	@Column(name = "remind_numer")
 	private int remindNumer = 0;
 
 	@Column(name = "data_flag")
