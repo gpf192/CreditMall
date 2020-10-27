@@ -110,7 +110,7 @@ public class CreditServiceImpl implements CreditService {
 		// TODO Auto-generated method stub
 		PageRequest pageable = PageRequest.of(pageNumber, pageSize);
 		Page<CreditRecordEntity> presentRecordEntities = creditRecordRepository
-				.findByMallUserEntityOrderByRecordTimeDesc(mallUserEntity, pageable);
+				.findByMallUserEntityOrderByGroupTimeDescRecordTimeDesc(mallUserEntity, pageable);
 		return presentRecordEntities.getContent();
 	}
 

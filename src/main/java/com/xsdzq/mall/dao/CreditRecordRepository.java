@@ -13,7 +13,7 @@ public interface CreditRecordRepository extends JpaRepository<CreditRecordEntity
 
 	List<CreditRecordEntity> findByMallUserEntityOrderByRecordTimeDesc(MallUserEntity mallUserEntity);
 
-	Page<CreditRecordEntity> findByMallUserEntityOrderByRecordTimeDesc(MallUserEntity mallUserEntity,
+	Page<CreditRecordEntity> findByMallUserEntityOrderByGroupTimeDescRecordTimeDesc(MallUserEntity mallUserEntity,
 			Pageable pageable);
 
 	List<CreditRecordEntity> findByMallUserEntityAndTypeAndChangeTypeLessThanEqualOrderByBeginDate(
