@@ -316,9 +316,8 @@ public class MallUserServiceImpl implements MallUserService {
 	}
 
 	void handleRudeceCredit(MallUserEntity mallUserEntity, int reduceScore) {
-		List<CreditRecordEntity> creditRecordEntities = creditRecordRepository
-				.findByMallUserEntityAndTypeAndChangeTypeLessThanEqualOrderByBeginDate(mallUserEntity,
-						CreditRecordConst.ADDSCORE, 1);
+		List<CreditRecordEntity> creditRecordEntities = creditRecordRepository.findByUnusedCredit(mallUserEntity,
+				CreditRecordConst.ADDSCORE, 1);
 		log.info("creditRecordEntities: " + creditRecordEntities.size());
 		for (CreditRecordEntity creditRecordEntity : creditRecordEntities) {
 			log.info(creditRecordEntity.toString());
