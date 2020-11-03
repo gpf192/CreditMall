@@ -65,13 +65,5 @@ public class PresentController {
 		List<PresentCategorys> presentCategoryEntities = presentService.getPresentCategoryEntities();
 		return GsonUtil.buildMap(0, "success", presentCategoryEntities);
 	}
-	
-	@GetMapping("/crm/getAllProducts")
-	public Map<String, Object> getAllProducts() {
-
-		List<CRMCreditProductViewEntity> entities = presentService.getAllCrmProducts();
-		return GsonUtil.buildMap(0, "success", entities);
-	}
-	
 
 }

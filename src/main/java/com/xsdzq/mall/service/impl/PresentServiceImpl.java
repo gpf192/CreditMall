@@ -35,8 +35,7 @@ public class PresentServiceImpl implements PresentService {
 	@Autowired
 	private PresentResultRepository presentResultRepository;
 	
-	@Autowired
-	private CrmProductRepository crmProductRepository;
+	
 
 	@Override
 	public List<PresentLatestResult> getLatestPresentResultEntities() {
@@ -99,10 +98,5 @@ public class PresentServiceImpl implements PresentService {
 		return presentCategorysList;
 	}
 
-	@Override
-	public List<CRMCreditProductViewEntity> getAllCrmProducts() {
-		// TODO Auto-generated method stub
-		return crmProductRepository.findByOrderByProductCode();
-	}
 
 }

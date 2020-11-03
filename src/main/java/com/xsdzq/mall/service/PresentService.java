@@ -2,7 +2,6 @@ package com.xsdzq.mall.service;
 
 import java.util.List;
 
-import com.xsdzq.mall.entity.CRMCreditProductViewEntity;
 import com.xsdzq.mall.entity.PresentEntity;
 import com.xsdzq.mall.model.PresentCategorys;
 import com.xsdzq.mall.model.PresentLatestResult;
@@ -18,7 +17,6 @@ public interface PresentService {
 	public List<PresentLatestResult> getLatestPresentResultEntities();
 
 	public List<PresentCategorys> getPresentCategoryEntities();
-	//crm
-	public List<CRMCreditProductViewEntity> getAllCrmProducts();
+	
 
 }
