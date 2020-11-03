@@ -17,5 +17,6 @@ public interface PresentService {
 	public List<PresentLatestResult> getLatestPresentResultEntities();
 
 	public List<PresentCategorys> getPresentCategoryEntities();
+	
 
 }

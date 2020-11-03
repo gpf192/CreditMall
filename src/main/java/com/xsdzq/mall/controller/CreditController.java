@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.xsdzq.mall.entity.CRMCreditProductViewEntity;
 import com.xsdzq.mall.entity.CreditRecordEntity;
 import com.xsdzq.mall.entity.MallUserEntity;
 import com.xsdzq.mall.model.CreditRecordMap;
@@ -58,5 +59,15 @@ public class CreditController {
 		PresentResult presentResult = creditService.getPresentResultEntities(mallUserEntity);
 		return GsonUtil.buildMap(0, "success", presentResult);
 	}
+	
+	
+	@GetMapping("/crm/getAllProducts")
+	public Map<String, Object> getAllProducts() {
+
+		List<CRMCreditProductViewEntity> entities = creditService.getAllCrmProducts();
+		return GsonUtil.buildMap(0, "success", entities);
+	}
+	
+
 
 }

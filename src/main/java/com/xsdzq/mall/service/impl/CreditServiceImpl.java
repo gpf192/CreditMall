@@ -13,8 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.xsdzq.mall.constants.CreditRecordConst;
 import com.xsdzq.mall.dao.CreditRecordRepository;
+import com.xsdzq.mall.dao.CrmProductRepository;
 import com.xsdzq.mall.dao.MallUserInfoRepository;
 import com.xsdzq.mall.dao.PresentResultRepository;
+import com.xsdzq.mall.entity.CRMCreditProductViewEntity;
 import com.xsdzq.mall.entity.CreditRecordCountEntity;
 import com.xsdzq.mall.entity.CreditRecordEntity;
 import com.xsdzq.mall.entity.MallUserEntity;
@@ -41,6 +43,9 @@ public class CreditServiceImpl implements CreditService {
 
 	@Autowired
 	private PresentResultRepository presentResultRepository;
+	
+	@Autowired
+	private CrmProductRepository crmProductRepository;
 
 	@Override
 	public List<CreditRecordEntity> getAllCreditRecordEntities() {
@@ -139,6 +144,12 @@ public class CreditServiceImpl implements CreditService {
 		presentResult.setResultCountList(resultCounts);
 
 		return presentResult;
+	}
+	
+	@Override
+	public List<CRMCreditProductViewEntity> getAllCrmProducts() {
+		// TODO Auto-generated method stub
+		return crmProductRepository.findByOrderByProductCode();
 	}
 
 }

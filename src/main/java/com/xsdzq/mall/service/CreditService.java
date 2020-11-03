@@ -2,6 +2,7 @@ package com.xsdzq.mall.service;
 
 import java.util.List;
 
+import com.xsdzq.mall.entity.CRMCreditProductViewEntity;
 import com.xsdzq.mall.entity.CreditRecordEntity;
 import com.xsdzq.mall.entity.MallUserEntity;
 import com.xsdzq.mall.model.CreditRecordMap;
@@ -16,5 +17,7 @@ public interface CreditService {
 	PresentResult getPresentResultEntities(MallUserEntity mallUserEntity);
 
 	CreditRecordMap getUserCreditRecord(MallUserEntity mallUserEntity);
+	//crm
+	public List<CRMCreditProductViewEntity> getAllCrmProducts();
 
 }

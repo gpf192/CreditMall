@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.xsdzq.mall.entity.CRMCreditProductViewEntity;
 import com.xsdzq.mall.entity.PresentEntity;
 import com.xsdzq.mall.model.PresentCategorys;
 import com.xsdzq.mall.model.PresentLatestResult;
@@ -64,7 +65,5 @@ public class PresentController {
 		List<PresentCategorys> presentCategoryEntities = presentService.getPresentCategoryEntities();
 		return GsonUtil.buildMap(0, "success", presentCategoryEntities);
 	}
-	
-	
 
 }

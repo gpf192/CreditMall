@@ -9,9 +9,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.xsdzq.mall.dao.CrmProductRepository;
 import com.xsdzq.mall.dao.PresentCategoryRepository;
 import com.xsdzq.mall.dao.PresentRepository;
 import com.xsdzq.mall.dao.PresentResultRepository;
+import com.xsdzq.mall.entity.CRMCreditProductViewEntity;
 import com.xsdzq.mall.entity.PresentCategoryEntity;
 import com.xsdzq.mall.entity.PresentEntity;
 import com.xsdzq.mall.entity.PresentResultEntity;
@@ -32,6 +34,8 @@ public class PresentServiceImpl implements PresentService {
 
 	@Autowired
 	private PresentResultRepository presentResultRepository;
+	
+	
 
 	@Override
 	public List<PresentLatestResult> getLatestPresentResultEntities() {
@@ -93,5 +97,6 @@ public class PresentServiceImpl implements PresentService {
 		}
 		return presentCategorysList;
 	}
+
 
 }
