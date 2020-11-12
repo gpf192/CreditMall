@@ -9,11 +9,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.xsdzq.mall.dao.CrmProductRepository;
 import com.xsdzq.mall.dao.PresentCategoryRepository;
 import com.xsdzq.mall.dao.PresentRepository;
 import com.xsdzq.mall.dao.PresentResultRepository;
-import com.xsdzq.mall.entity.CRMCreditProductViewEntity;
 import com.xsdzq.mall.entity.PresentCategoryEntity;
 import com.xsdzq.mall.entity.PresentEntity;
 import com.xsdzq.mall.entity.PresentResultEntity;
@@ -90,7 +88,7 @@ public class PresentServiceImpl implements PresentService {
 			// presentCategorys.setFlag(presentCategoryEntity.isFlag());
 			presentCategorys.setSort(presentCategoryEntity.getSort());
 			List<PresentEntity> presentEntities = presentRepository
-					.findByPresentCategoryEntityOrderBySortDesc(presentCategoryEntity);
+					.findByPresentCategoryEntityAndStatusOrderBySortDesc(presentCategoryEntity,"0");
 			presentCategorys.setPresentEntities(presentEntities);
 			presentCategorysList.add(presentCategorys);
 
