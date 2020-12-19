@@ -15,8 +15,8 @@ public class UserUtil {
 		user.setAppVersion(userEntity.getAppVersion());
 		user.setLastOpIP(userEntity.getLastOpIP());
 		user.setLastLoginTime(userEntity.getLastLoginTime());
-		user.setDepartmentCode(userEntity.getDepartmentCode());
-		user.setDepartmentName(userEntity.getDepartmentName());
+		//user.setDepartmentCode(userEntity.getDepartmentCode());
+		//user.setDepartmentName(userEntity.getDepartmentName());
 		return user;
 	}
 

@@ -223,6 +223,9 @@ public class MallUserServiceImpl implements MallUserService {
 			int sumScore = (int) (presentEntity.getValue() * 100 * prizeNumber);
 			// a.用户减少积分
 			MallUserInfoEntity mallUserInfoEntity = mallUserInfoRepository.findByMallUserEntity(mallUserEntity);
+			if (mallUserInfoEntity.getCreditScore() - sumScore < 0) {
+				throw new BusinessException("积分不足！");
+			}
 			mallUserInfoEntity.setCreditScore(mallUserInfoEntity.getCreditScore() - sumScore);
 			mallUserInfoRepository.save(mallUserInfoEntity);
 
