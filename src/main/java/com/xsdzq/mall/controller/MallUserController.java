@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
 import com.xsdzq.mall.annotation.UserLoginToken;
 import com.xsdzq.mall.entity.MallUserEntity;
+import com.xsdzq.mall.entity.MallUserInfoEntity;
 import com.xsdzq.mall.entity.PresentCardEntity;
 import com.xsdzq.mall.model.ActivityNumber;
 import com.xsdzq.mall.model.PreExchangePresent;
@@ -24,6 +25,7 @@ import com.xsdzq.mall.model.PresentModel;
 import com.xsdzq.mall.model.PresentModelNumber;
 import com.xsdzq.mall.model.User;
 import com.xsdzq.mall.model.UserData;
+import com.xsdzq.mall.model.UserScoreNumber;
 import com.xsdzq.mall.service.MallUserService;
 import com.xsdzq.mall.service.TokenService;
 import com.xsdzq.mall.util.AESUtil;
@@ -81,16 +83,22 @@ public class MallUserController {
 		MallUserEntity mallUserEntity = tokenService.getMallUserEntity(token);
 		log.info("getPresentId: " + presentModelNumber.getPresentId());
 		mallUserService.exchangePresent(mallUserEntity, presentModelNumber);
-		return GsonUtil.buildMap(0, "ok", null);
+		MallUserInfoEntity mallUserInfoEntity = mallUserService.findByMallUserEntity(mallUserEntity);
+		UserScoreNumber userScoreNumber = new UserScoreNumber();
+		if (mallUserInfoEntity != null) {
+			userScoreNumber.setScoreNumber(mallUserInfoEntity.getCreditScore());
+		}
+		return GsonUtil.buildMap(0, "ok", userScoreNumber);
 	}
-	
+
 	@GetMapping(value = "/cards")
 	@UserLoginToken
-	public Map<String, Object> getPresentCards(@RequestHeader("Authorization") String token, @RequestParam long resultId) {
+	public Map<String, Object> getPresentCards(@RequestHeader("Authorization") String token,
+			@RequestParam long resultId) {
 		MallUserEntity mallUserEntity = tokenService.getMallUserEntity(token);
 		List<PresentCardEntity> presentCardEntities = mallUserService.getPresentCardEntities(resultId);
 		return GsonUtil.buildMap(0, "ok", presentCardEntities);
-		
+
 	}
 
 	@GetMapping(value = "/credit/add")

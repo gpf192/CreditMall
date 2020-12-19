@@ -3,6 +3,7 @@ package com.xsdzq.mall.service;
 import java.util.List;
 
 import com.xsdzq.mall.entity.MallUserEntity;
+import com.xsdzq.mall.entity.MallUserInfoEntity;
 import com.xsdzq.mall.entity.PresentCardEntity;
 import com.xsdzq.mall.model.ActivityNumber;
 import com.xsdzq.mall.model.PreExchangePresent;
@@ -24,6 +25,8 @@ public interface MallUserService {
 	public void exchangePresent(MallUserEntity mallUserEntity, PresentModelNumber presentModelNumber);
 
 	public List<PresentCardEntity> getPresentCardEntities(long resultId);
+
+	public MallUserInfoEntity findByMallUserEntity(MallUserEntity mallUserEntity);
 
 	public void addCreditScore();
 

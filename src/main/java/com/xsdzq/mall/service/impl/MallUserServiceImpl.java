@@ -363,4 +363,11 @@ public class MallUserServiceImpl implements MallUserService {
 
 	}
 
+	@Override
+	public MallUserInfoEntity findByMallUserEntity(MallUserEntity mallUserEntity) {
+		// TODO Auto-generated method stub
+		MallUserInfoEntity mallUserInfoEntity = mallUserInfoRepository.findByMallUserEntity(mallUserEntity);
+		return mallUserInfoEntity;
+	}
+
 }
