@@ -33,6 +33,10 @@ public class MallUserEntity implements Serializable {
 	@Column(name = "client_id", unique = true, nullable = false, length = 100)
 	private String clientId;
 
+	// 登录ClientId
+	@Column(name = "login_client_id", nullable = true, length = 100)
+	private String loginClentId;
+
 	@Column(name = "client_name", nullable = true, length = 300)
 	private String clientName;
 
@@ -88,6 +92,14 @@ public class MallUserEntity implements Serializable {
 
 	public void setClientId(String clientId) {
 		this.clientId = clientId;
+	}
+
+	public String getLoginClentId() {
+		return loginClentId;
+	}
+
+	public void setLoginClentId(String loginClentId) {
+		this.loginClentId = loginClentId;
 	}
 
 	public String getClientName() {
@@ -188,11 +200,12 @@ public class MallUserEntity implements Serializable {
 
 	@Override
 	public String toString() {
-		return "MallUserEntity [id=" + id + ", clientId=" + clientId + ", clientName=" + clientName + ", fundAccount="
-				+ fundAccount + ", accessToken=" + accessToken + ", password=" + password + ", mobile=" + mobile
-				+ ", appVersion=" + appVersion + ", lastOpIP=" + lastOpIP + ", lastLoginTime=" + lastLoginTime
-				+ ", departmentCode=" + departmentCode + ", departmentName=" + departmentName + ", createtime="
-				+ createtime + ", modifytime=" + modifytime + "]";
+		return "MallUserEntity [id=" + id + ", clientId=" + clientId + ", loginClentId=" + loginClentId
+				+ ", clientName=" + clientName + ", fundAccount=" + fundAccount + ", accessToken=" + accessToken
+				+ ", password=" + password + ", mobile=" + mobile + ", appVersion=" + appVersion + ", lastOpIP="
+				+ lastOpIP + ", lastLoginTime=" + lastLoginTime + ", departmentCode=" + departmentCode
+				+ ", departmentName=" + departmentName + ", createtime=" + createtime + ", modifytime=" + modifytime
+				+ "]";
 	}
 
 }

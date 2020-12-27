@@ -6,9 +6,17 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.xsdzq.mall.constants.CreditRecordConst;
 import com.xsdzq.mall.constants.PresentCardConst;
 import com.xsdzq.mall.constants.PresentConst;
@@ -31,6 +39,7 @@ import com.xsdzq.mall.model.ActivityNumber;
 import com.xsdzq.mall.model.PreExchangePresent;
 import com.xsdzq.mall.model.PresentModelNumber;
 import com.xsdzq.mall.model.User;
+import com.xsdzq.mall.properties.HSURLProperties;
 import com.xsdzq.mall.service.MallUserService;
 import com.xsdzq.mall.util.DateUtil;
 import com.xsdzq.mall.util.UserUtil;
@@ -62,15 +71,53 @@ public class MallUserServiceImpl implements MallUserService {
 	@Autowired
 	private PresentRecordRepository presentRecordRepository;
 
+	@Autowired
+	private HSURLProperties hSURLProperties;
+
+	@Autowired
+	private RestTemplate restTemplate;
+
+	public void hsServiceCheck(String accessToken, String loginClientId) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("access_token", accessToken);
+		HttpEntity<String> requestEntity = new HttpEntity<>(null, headers);
+		String HS_GET_URL = hSURLProperties.getInfo();
+		String url = HS_GET_URL + "?client_id=" + loginClientId;
+		log.info(headers.toString());
+		log.info("request url: " + url);
+		ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
+		if (HttpStatus.OK == responseEntity.getStatusCode()) {
+			String response = responseEntity.getBody();
+			log.info("hs loginClientId " + loginClientId + " response: " + response);
+			JSONObject hsJsonObject = JSON.parseObject(response);
+			String responseClientId = hsJsonObject.getString("client_id");
+			if (responseClientId != null && loginClientId.equals(responseClientId)) {
+				// 校验通过
+				log.info(loginClientId + " 校验通过");
+
+			} else {
+				throw new BusinessException("登录失败，请重新登录");
+			}
+
+		} else {
+			log.error("#method# 远程调用失败 httpCode = [{}]", responseEntity.getStatusCode());
+			throw new BusinessException("登录服务异常");
+		}
+
+	}
+
 	@Override
 	@Transactional
 	public ActivityNumber login(User user) {
 		// TODO Auto-generated method stub
+		// 0 前置 恒生校验
+		hsServiceCheck(user.getAccessToken(), user.getLoginClientId());
+		// 1 产生token
 		MallUserEntity requestUser = mallUserRepository.findByClientId(user.getClientId());
 		MallUserInfoEntity mallUserInfoEntity = null;
 		if (requestUser == null) {
 			requestUser = UserUtil.convertUserByUserEntity(user);
-			log.info(requestUser.toString());
+			log.info("save user " + requestUser.toString());
 			mallUserRepository.save(requestUser);
 			mallUserInfoEntity = new MallUserInfoEntity();
 			mallUserInfoEntity.setMallUserEntity(requestUser);
@@ -88,6 +135,30 @@ public class MallUserServiceImpl implements MallUserService {
 		return activityNumber;
 
 	}
+
+	/*
+	 * 
+	 * @Override
+	 * 
+	 * @Transactional public ActivityNumber login(User user) { // TODO
+	 * Auto-generated method stub MallUserEntity requestUser =
+	 * mallUserRepository.findByClientId(user.getClientId()); MallUserInfoEntity
+	 * mallUserInfoEntity = null; if (requestUser == null) { requestUser =
+	 * UserUtil.convertUserByUserEntity(user); log.info(requestUser.toString());
+	 * mallUserRepository.save(requestUser); mallUserInfoEntity = new
+	 * MallUserInfoEntity(); mallUserInfoEntity.setMallUserEntity(requestUser);
+	 * mallUserInfoEntity.setCreditScore(0); mallUserInfoEntity.setSumScore(0);
+	 * mallUserInfoEntity.setLevel(0);
+	 * mallUserInfoRepository.save(mallUserInfoEntity); } else { mallUserInfoEntity
+	 * = mallUserInfoRepository.findByMallUserEntity(requestUser);
+	 * UserUtil.updateUserEntityByUser(requestUser, user);
+	 * mallUserRepository.saveAndFlush(requestUser); } ActivityNumber activityNumber
+	 * = new ActivityNumber();
+	 * activityNumber.setScoreNumber(mallUserInfoEntity.getCreditScore()); return
+	 * activityNumber;
+	 * 
+	 * }
+	 */
 
 	@Override
 	public void addMallUser(MallUserEntity mallUserEntity) {
