@@ -57,6 +57,16 @@ public class MallUserController {
 		}
 		log.info(userString);
 		User user = JSON.parseObject(userString, User.class);
+		log.info(user.toString());
+
+		if (user.getAccessToken() == null || user.getAccessToken().equals("")) {
+			return GsonUtil.buildMap(1, "token不能为空", null);
+		}
+
+		if (user.getLoginClientId() == null || user.getLoginClientId().equals("")) {
+			return GsonUtil.buildMap(1, "登录标示不能为空", null);
+		}
+
 		ActivityNumber activityNumber = mallUserService.login(user);
 		MallUserEntity mallUserEntity = mallUserService.getUserByClientId(user.getClientId());
 		String token = tokenService.getToken(UserUtil.convertUserByUserEntity(mallUserEntity));
