@@ -17,15 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
 import com.xsdzq.mall.annotation.UserLoginToken;
 import com.xsdzq.mall.entity.MallUserEntity;
-import com.xsdzq.mall.entity.MallUserInfoEntity;
 import com.xsdzq.mall.entity.PresentCardEntity;
 import com.xsdzq.mall.model.ActivityNumber;
 import com.xsdzq.mall.model.PreExchangePresent;
 import com.xsdzq.mall.model.PresentModel;
-import com.xsdzq.mall.model.PresentModelNumber;
 import com.xsdzq.mall.model.User;
 import com.xsdzq.mall.model.UserData;
-import com.xsdzq.mall.model.UserScoreNumber;
 import com.xsdzq.mall.service.MallUserService;
 import com.xsdzq.mall.service.TokenService;
 import com.xsdzq.mall.util.AESUtil;
@@ -59,13 +56,18 @@ public class MallUserController {
 		User user = JSON.parseObject(userString, User.class);
 		log.info(user.toString());
 
+		if (user.getClientId() == null || user.getClientId().equals("")) {
+			return GsonUtil.buildMap(1, "登录信息为空，请重新登录", null);
+		}
+
 		if (user.getAccessToken() == null || user.getAccessToken().equals("")) {
 			return GsonUtil.buildMap(1, "token不能为空", null);
 		}
+		// 二期兑换功能 --增加校验
 
-		if (user.getLoginClientId() == null || user.getLoginClientId().equals("")) {
-			return GsonUtil.buildMap(1, "登录标示不能为空", null);
-		}
+		// if (user.getLoginClientId() == null || user.getLoginClientId().equals("")) {
+		// return GsonUtil.buildMap(1, "登录标示不能为空", null);
+		// }
 
 		ActivityNumber activityNumber = mallUserService.login(user);
 		MallUserEntity mallUserEntity = mallUserService.getUserByClientId(user.getClientId());
@@ -86,20 +88,25 @@ public class MallUserController {
 		return GsonUtil.buildMap(0, "ok", preExchangePresent);
 	}
 
-	@PostMapping(value = "/exchange")
-	@UserLoginToken
-	public Map<String, Object> exchangePrize(@RequestHeader("Authorization") String token,
-			@RequestBody PresentModelNumber presentModelNumber) {
-		MallUserEntity mallUserEntity = tokenService.getMallUserEntity(token);
-		log.info("getPresentId: " + presentModelNumber.getPresentId());
-		mallUserService.exchangePresent(mallUserEntity, presentModelNumber);
-		MallUserInfoEntity mallUserInfoEntity = mallUserService.findByMallUserEntity(mallUserEntity);
-		UserScoreNumber userScoreNumber = new UserScoreNumber();
-		if (mallUserInfoEntity != null) {
-			userScoreNumber.setScoreNumber(mallUserInfoEntity.getCreditScore());
-		}
-		return GsonUtil.buildMap(0, "ok", userScoreNumber);
-	}
+	// @PostMapping(value = "/exchange")
+	// @UserLoginToken
+	// public Map<String, Object> exchangePrize(@RequestHeader("Authorization")
+	// String token,
+	// @RequestBody PresentModelNumber presentModelNumber) {
+	// MallUserEntity mallUserEntity = tokenService.getMallUserEntity(token);
+	// if (mallUserEntity == null) {
+	// return GsonUtil.buildMap(1, "非法访问", null);
+	// }
+	// log.info("getPresentId: " + presentModelNumber.getPresentId());
+	// mallUserService.exchangePresent(mallUserEntity, presentModelNumber);
+	// MallUserInfoEntity mallUserInfoEntity =
+	// mallUserService.findByMallUserEntity(mallUserEntity);
+	// UserScoreNumber userScoreNumber = new UserScoreNumber();
+	// if (mallUserInfoEntity != null) {
+	// userScoreNumber.setScoreNumber(mallUserInfoEntity.getCreditScore());
+	// }
+	// return GsonUtil.buildMap(0, "ok", userScoreNumber);
+	// }
 
 	@GetMapping(value = "/cards")
 	@UserLoginToken
@@ -108,15 +115,6 @@ public class MallUserController {
 		MallUserEntity mallUserEntity = tokenService.getMallUserEntity(token);
 		List<PresentCardEntity> presentCardEntities = mallUserService.getPresentCardEntities(resultId);
 		return GsonUtil.buildMap(0, "ok", presentCardEntities);
-
-	}
-
-	@GetMapping(value = "/credit/add")
-	public Map<String, Object> addMallUser() {
-
-		// mallUserService.addMallUser(mallUserEntity);
-		mallUserService.addCreditScore();
-		return GsonUtil.buildMap(0, "success", null);
 
 	}
 

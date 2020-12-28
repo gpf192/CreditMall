@@ -29,13 +29,13 @@ public class CreditController {
 	@Autowired
 	private TokenService tokenService;
 
-	@GetMapping(value = "/all")
-	public Map<String, Object> addMallUser() {
-
-		// mallUserService.addMallUser(mallUserEntity);
-		List<CreditRecordEntity> creditList = creditService.getAllCreditRecordEntities();
-		return GsonUtil.buildMap(0, "success", creditList);
-	}
+	//	@GetMapping(value = "/all")
+	//	public Map<String, Object> addMallUser() {
+	//
+	//		// mallUserService.addMallUser(mallUserEntity);
+	//		List<CreditRecordEntity> creditList = creditService.getAllCreditRecordEntities();
+	//		return GsonUtil.buildMap(0, "success", creditList);
+	//	}
 
 	@GetMapping(value = "/record")
 	public Map<String, Object> getMyRecordResult(@RequestHeader("Authorization") String token,
