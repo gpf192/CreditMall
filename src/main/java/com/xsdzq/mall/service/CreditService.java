@@ -19,5 +19,7 @@ public interface CreditService {
 	CreditRecordMap getUserCreditRecord(MallUserEntity mallUserEntity);
 	//crm
 	public List<CRMCreditProductViewEntity> getAllCrmProducts();
+	
+	public List<CRMCreditProductViewEntity> getTopCrmProducts();
 
 }
