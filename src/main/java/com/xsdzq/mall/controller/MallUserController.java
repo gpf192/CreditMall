@@ -70,6 +70,9 @@ public class MallUserController {
 		// }
 
 		ActivityNumber activityNumber = mallUserService.login(user);
+		if (activityNumber == null) {
+			return GsonUtil.buildMap(1, "登录失败，请重新登录", null);
+		}
 		MallUserEntity mallUserEntity = mallUserService.getUserByClientId(user.getClientId());
 		String token = tokenService.getToken(UserUtil.convertUserByUserEntity(mallUserEntity));
 		activityNumber.setToken(token);

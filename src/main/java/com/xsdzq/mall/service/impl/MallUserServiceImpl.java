@@ -82,7 +82,7 @@ public class MallUserServiceImpl implements MallUserService {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	public void hsServiceCheck(String clientId, String loginClientId, String accessToken) {
+	public boolean hsServiceCheck(String clientId, String loginClientId, String accessToken) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("access_token", accessToken);
 		HttpEntity<String> requestEntity = new HttpEntity<>(null, headers);
@@ -108,14 +108,17 @@ public class MallUserServiceImpl implements MallUserService {
 				if (responseClientId != null && loginClientId.equals(responseClientId)) {
 					// 校验通过
 					log.info(loginClientId + " 校验通过");
+					return true;
 
 				} else {
-					throw new BusinessException("登录失败，请重新登录");
+					return false;
+					// throw new BusinessException("登录失败，请重新登录");
 				}
 
 			} else {
 				log.error("#method# 远程调用失败 httpCode = [{}]", responseEntity.getStatusCode());
-				throw new BusinessException("登录服务异常");
+				return false;
+				// throw new BusinessException("登录服务异常");
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -125,7 +128,9 @@ public class MallUserServiceImpl implements MallUserService {
 			tokenRecordEntity.setAccessToken(accessToken);
 			tokenRecordEntity.setResponse(e.getMessage());
 			log.info("恒生调用 base/get 异常:" + tokenRecordEntity.toString());
-			throw new BusinessException("登录失败，请重新登录");
+			tokenRecordRepository.save(tokenRecordEntity);
+			return false;
+			// throw new BusinessException("登录失败，请重新登录");
 		}
 
 	}
@@ -136,7 +141,10 @@ public class MallUserServiceImpl implements MallUserService {
 		// TODO Auto-generated method stub
 		// 0 前置 恒生校验 第一个版本需要注释
 		if (user.getLoginClientId() != null && user.getLoginClientId().length() > 0) {
-			hsServiceCheck(user.getClientId(), user.getLoginClientId(), user.getAccessToken());
+			boolean isCheck = hsServiceCheck(user.getClientId(), user.getLoginClientId(), user.getAccessToken());
+			if (!isCheck) {
+				return null;
+			}
 		} else {
 			log.info(user.getClientId() + " 校验未通过");
 		}
