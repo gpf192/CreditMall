@@ -27,6 +27,7 @@ import com.xsdzq.mall.dao.PresentCardRepository;
 import com.xsdzq.mall.dao.PresentRecordRepository;
 import com.xsdzq.mall.dao.PresentRepository;
 import com.xsdzq.mall.dao.PresentResultRepository;
+import com.xsdzq.mall.dao.TokenRecordRepository;
 import com.xsdzq.mall.entity.CreditRecordEntity;
 import com.xsdzq.mall.entity.MallUserEntity;
 import com.xsdzq.mall.entity.MallUserInfoEntity;
@@ -34,6 +35,7 @@ import com.xsdzq.mall.entity.PresentCardEntity;
 import com.xsdzq.mall.entity.PresentEntity;
 import com.xsdzq.mall.entity.PresentRecordEntity;
 import com.xsdzq.mall.entity.PresentResultEntity;
+import com.xsdzq.mall.entity.TokenRecordEntity;
 import com.xsdzq.mall.exception.BusinessException;
 import com.xsdzq.mall.model.ActivityNumber;
 import com.xsdzq.mall.model.PreExchangePresent;
@@ -72,12 +74,15 @@ public class MallUserServiceImpl implements MallUserService {
 	private PresentRecordRepository presentRecordRepository;
 
 	@Autowired
+	private TokenRecordRepository tokenRecordRepository;
+
+	@Autowired
 	private HSURLProperties hSURLProperties;
 
 	@Autowired
 	private RestTemplate restTemplate;
 
-	public void hsServiceCheck(String accessToken, String loginClientId) {
+	public boolean hsServiceCheck(String clientId, String loginClientId, String accessToken) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("access_token", accessToken);
 		HttpEntity<String> requestEntity = new HttpEntity<>(null, headers);
@@ -85,23 +90,47 @@ public class MallUserServiceImpl implements MallUserService {
 		String url = HS_GET_URL + "?client_id=" + loginClientId;
 		log.info(headers.toString());
 		log.info("request url: " + url);
-		ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
-		if (HttpStatus.OK == responseEntity.getStatusCode()) {
-			String response = responseEntity.getBody();
-			log.info("hs loginClientId " + loginClientId + " response: " + response);
-			JSONObject hsJsonObject = JSON.parseObject(response);
-			String responseClientId = hsJsonObject.getString("client_id");
-			if (responseClientId != null && loginClientId.equals(responseClientId)) {
-				// 校验通过
-				log.info(loginClientId + " 校验通过");
+		try {
+			ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity,
+					String.class);
+			if (HttpStatus.OK == responseEntity.getStatusCode()) {
+				String response = responseEntity.getBody();
+				log.info("hs loginClientId " + loginClientId + " response: " + response);
+				TokenRecordEntity tokenRecordEntity = new TokenRecordEntity();
+				tokenRecordEntity.setClientId(clientId);
+				tokenRecordEntity.setLoginClientId(loginClientId);
+				tokenRecordEntity.setAccessToken(accessToken);
+				tokenRecordEntity.setResponse(response);
+				tokenRecordRepository.save(tokenRecordEntity);
+
+				JSONObject hsJsonObject = JSON.parseObject(response);
+				String responseClientId = hsJsonObject.getString("client_id");
+				if (responseClientId != null && loginClientId.equals(responseClientId)) {
+					// 校验通过
+					log.info(loginClientId + " 校验通过");
+					return true;
+
+				} else {
+					return false;
+					// throw new BusinessException("登录失败，请重新登录");
+				}
 
 			} else {
-				throw new BusinessException("登录失败，请重新登录");
+				log.error("#method# 远程调用失败 httpCode = [{}]", responseEntity.getStatusCode());
+				return false;
+				// throw new BusinessException("登录服务异常");
 			}
-
-		} else {
-			log.error("#method# 远程调用失败 httpCode = [{}]", responseEntity.getStatusCode());
-			throw new BusinessException("登录服务异常");
+		} catch (Exception e) {
+			// TODO: handle exception
+			TokenRecordEntity tokenRecordEntity = new TokenRecordEntity();
+			tokenRecordEntity.setClientId(clientId);
+			tokenRecordEntity.setLoginClientId(loginClientId);
+			tokenRecordEntity.setAccessToken(accessToken);
+			tokenRecordEntity.setResponse(e.getMessage());
+			log.info("恒生调用 base/get 异常:" + tokenRecordEntity.toString());
+			tokenRecordRepository.save(tokenRecordEntity);
+			return false;
+			// throw new BusinessException("登录失败，请重新登录");
 		}
 
 	}
@@ -110,8 +139,15 @@ public class MallUserServiceImpl implements MallUserService {
 	@Transactional
 	public ActivityNumber login(User user) {
 		// TODO Auto-generated method stub
-		// 0 前置 恒生校验
-		hsServiceCheck(user.getAccessToken(), user.getLoginClientId());
+		// 0 前置 恒生校验 第一个版本需要注释
+		if (user.getLoginClientId() != null && user.getLoginClientId().length() > 0) {
+			boolean isCheck = hsServiceCheck(user.getClientId(), user.getLoginClientId(), user.getAccessToken());
+			if (!isCheck) {
+				return null;
+			}
+		} else {
+			log.info(user.getClientId() + " 校验未通过");
+		}
 		// 1 产生token
 		MallUserEntity requestUser = mallUserRepository.findByClientId(user.getClientId());
 		MallUserInfoEntity mallUserInfoEntity = null;
@@ -279,6 +315,9 @@ public class MallUserServiceImpl implements MallUserService {
 
 		// 查询出奖品
 		PresentEntity presentEntity = presentRepository.findById((long) presentId).get();
+		if (presentEntity == null) {
+			throw new BusinessException("非法兑换");
+		}
 
 		Date nowDate = new Date();
 		String nowDateStr = DateUtil.getStandardDate(nowDate);
