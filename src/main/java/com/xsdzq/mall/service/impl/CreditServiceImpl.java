@@ -152,4 +152,13 @@ public class CreditServiceImpl implements CreditService {
 		return crmProductRepository.findByOrderByProductCode();
 	}
 
+	@Override
+	public List<CRMCreditProductViewEntity> getTopCrmProducts() {
+		// TODO Auto-generated method stub
+		
+		//PageRequest pageable = PageRequest.of(0, 5);
+		//Page<CRMCreditProductViewEntity> cPage =crmProductRepository.findByOrderByProductCode(pageable);
+		return null;
+	}
+
 }

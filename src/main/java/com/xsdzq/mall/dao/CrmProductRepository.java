@@ -8,4 +8,6 @@ import com.xsdzq.mall.entity.CRMCreditProductViewEntity;
 
 public interface CrmProductRepository extends JpaRepository<CRMCreditProductViewEntity, Long>{
 	List<CRMCreditProductViewEntity> findByOrderByProductCode();
+	
+	//Page<CRMCreditProductViewEntity> findByOrderByProductCode(PageRequest pageable);
 }

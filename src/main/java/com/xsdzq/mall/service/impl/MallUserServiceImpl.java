@@ -140,14 +140,14 @@ public class MallUserServiceImpl implements MallUserService {
 	public ActivityNumber login(User user) {
 		// TODO Auto-generated method stub
 		// 0 前置 恒生校验 第一个版本需要注释
-		if (user.getLoginClientId() != null && user.getLoginClientId().length() > 0) {
+		/*if (user.getLoginClientId() != null && user.getLoginClientId().length() > 0) {
 			boolean isCheck = hsServiceCheck(user.getClientId(), user.getLoginClientId(), user.getAccessToken());
 			if (!isCheck) {
 				return null;
 			}
 		} else {
 			log.info(user.getClientId() + " 校验未通过");
-		}
+		}*/
 		// 1 产生token
 		MallUserEntity requestUser = mallUserRepository.findByClientId(user.getClientId());
 		MallUserInfoEntity mallUserInfoEntity = null;
