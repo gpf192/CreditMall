@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.xsdzq.mall.annotation.UserLoginToken;
 import com.xsdzq.mall.entity.CRMCreditProductViewEntity;
 import com.xsdzq.mall.entity.CreditRecordEntity;
 import com.xsdzq.mall.entity.MallUserEntity;
@@ -29,15 +30,8 @@ public class CreditController {
 	@Autowired
 	private TokenService tokenService;
 
-	//	@GetMapping(value = "/all")
-	//	public Map<String, Object> addMallUser() {
-	//
-	//		// mallUserService.addMallUser(mallUserEntity);
-	//		List<CreditRecordEntity> creditList = creditService.getAllCreditRecordEntities();
-	//		return GsonUtil.buildMap(0, "success", creditList);
-	//	}
-
 	@GetMapping(value = "/record")
+	@UserLoginToken
 	public Map<String, Object> getMyRecordResult(@RequestHeader("Authorization") String token,
 			@RequestParam int pageNumber, @RequestParam int pageSize) {
 		MallUserEntity mallUserEntity = tokenService.getMallUserEntity(token);
@@ -47,6 +41,7 @@ public class CreditController {
 	}
 
 	@GetMapping(value = "/month")
+	@UserLoginToken
 	public Map<String, Object> getMyMothRecordReord(@RequestHeader("Authorization") String token) {
 		MallUserEntity mallUserEntity = tokenService.getMallUserEntity(token);
 		CreditRecordMap creditRecordMap = creditService.getUserCreditRecord(mallUserEntity);
@@ -54,20 +49,18 @@ public class CreditController {
 	}
 
 	@GetMapping(value = "/result")
+	@UserLoginToken
 	public Map<String, Object> getMyPresetResult(@RequestHeader("Authorization") String token) {
 		MallUserEntity mallUserEntity = tokenService.getMallUserEntity(token);
 		PresentResult presentResult = creditService.getPresentResultEntities(mallUserEntity);
 		return GsonUtil.buildMap(0, "success", presentResult);
 	}
-	
-	
+
 	@GetMapping("/crm/getAllProducts")
 	public Map<String, Object> getAllProducts() {
 
 		List<CRMCreditProductViewEntity> entities = creditService.getAllCrmProducts();
 		return GsonUtil.buildMap(0, "success", entities);
 	}
-	
-
 
 }

@@ -18,7 +18,8 @@ public class JwtUtil {
 
 	public String getToken(User user) {
 
-		Algorithm algorithm = Algorithm.HMAC256(key);
+		// Algorithm algorithm = Algorithm.HMAC256(key);
+		Algorithm algorithm = Algorithm.HMAC512(key);
 		long nowMillis = System.currentTimeMillis();
 		long exprieMillis = nowMillis + expiretime;
 		Date now = new Date(nowMillis);
