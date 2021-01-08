@@ -2,6 +2,8 @@ package com.xsdzq.mall.service.impl;
 
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,8 @@ import com.xsdzq.mall.service.TokenService;
 @Service("tokenServiceImpl")
 public class TokenServiceImpl implements TokenService {
 
+	private static final Logger log = LoggerFactory.getLogger(TokenServiceImpl.class);
+
 	@Value("${jwt.expiretime}")
 	private int expiretime;
 	@Value("${jwt.secret.key}")
@@ -33,8 +37,11 @@ public class TokenServiceImpl implements TokenService {
 	@Override
 	public String getToken(User user) {
 		// TODO Auto-generated method stub
-		Algorithm algorithm = Algorithm.HMAC256(key);
+		// Algorithm algorithm = Algorithm.HMAC256(key);
+
+		Algorithm algorithm = Algorithm.HMAC512(key);
 		long nowMillis = System.currentTimeMillis();
+		log.info("expiretime: " + expiretime);
 		long exprieMillis = nowMillis + expiretime;
 		Date now = new Date(nowMillis);
 		Date exprieDate = new Date(exprieMillis);
@@ -43,6 +50,7 @@ public class TokenServiceImpl implements TokenService {
 		token = JWT.create().withSubject(XSDZQSUBJECT).withAudience(user.getClientId()).withIssuedAt(now)
 				.withExpiresAt(exprieDate).sign(algorithm);
 		return token;
+
 	}
 
 	@Override

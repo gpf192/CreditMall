@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.method.HandlerMethod;
@@ -19,9 +21,12 @@ import com.auth0.jwt.interfaces.JWTVerifier;
 import com.xsdzq.mall.annotation.PassToken;
 import com.xsdzq.mall.annotation.UserLoginToken;
 import com.xsdzq.mall.entity.MallUserEntity;
+import com.xsdzq.mall.exception.BusinessException;
 import com.xsdzq.mall.service.MallUserService;
 
 public class AuthenticationInterceptor implements HandlerInterceptor {
+
+	private static final Logger log = LoggerFactory.getLogger(AuthenticationInterceptor.class);
 
 	@Value("${jwt.secret.key}")
 	private String key;
@@ -50,32 +55,37 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 			UserLoginToken userLoginToken = method.getAnnotation(UserLoginToken.class);
 			if (userLoginToken.required()) {
 				// 执行认证
+				// 1 null 判断
 				if (token == null) {
 					throw new RuntimeException("no token,please login");
 				}
+				// 2.1 token 校验 解析Adudience
 				String clientId;
 				try {
 					clientId = JWT.decode(token).getAudience().get(0);
-
 				} catch (JWTDecodeException e) {
 					// TODO: handle exception
 					throw new RuntimeException("401");
 				}
-				MallUserEntity mallUserEntity = mallUserService.getUserByClientId(clientId);
-				if (mallUserEntity == null) {
-					throw new RuntimeException("用户不存在，请重新登陆");
-				}
-				Algorithm algorithm = Algorithm.HMAC256(key);
+				// 2.2 token 校验 解析 verify
+				Algorithm algorithm = Algorithm.HMAC512(key);
 				JWTVerifier jwtVerifier = JWT.require(algorithm).build();
 				try {
 					jwtVerifier.verify(token);
 				} catch (JWTVerificationException e) {
 					// TODO: handle exception
-					System.out.println(e.getMessage());
-					throw new RuntimeException("401");
+					log.info(clientId + ": token校验异常 " + e.getMessage());
+					throw new BusinessException("401");
+				} catch (Exception e) {
+					// TODO: handle exception
+					throw new BusinessException("401");
+				}
+				// 3 查询用户验证真实性
+				MallUserEntity mallUserEntity = mallUserService.getUserByClientId(clientId);
+				if (mallUserEntity == null) {
+					throw new BusinessException("用户不存在，请重新登陆");
 				}
 				return true;
-
 			}
 
 		}

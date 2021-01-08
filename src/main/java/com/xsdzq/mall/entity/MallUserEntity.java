@@ -16,6 +16,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "mall_user")
 @EntityListeners(AuditingEntityListener.class)
@@ -86,6 +88,7 @@ public class MallUserEntity implements Serializable {
 		this.id = id;
 	}
 
+	@JsonIgnore
 	public String getClientId() {
 		return clientId;
 	}
@@ -94,6 +97,7 @@ public class MallUserEntity implements Serializable {
 		this.clientId = clientId;
 	}
 
+	@JsonIgnore
 	public String getLoginClentId() {
 		return loginClentId;
 	}
@@ -102,6 +106,7 @@ public class MallUserEntity implements Serializable {
 		this.loginClentId = loginClentId;
 	}
 
+	@JsonIgnore
 	public String getClientName() {
 		return clientName;
 	}
@@ -110,6 +115,7 @@ public class MallUserEntity implements Serializable {
 		this.clientName = clientName;
 	}
 
+	@JsonIgnore
 	public String getFundAccount() {
 		return fundAccount;
 	}
@@ -118,6 +124,7 @@ public class MallUserEntity implements Serializable {
 		this.fundAccount = fundAccount;
 	}
 
+	@JsonIgnore
 	public String getAccessToken() {
 		return accessToken;
 	}
@@ -126,6 +133,7 @@ public class MallUserEntity implements Serializable {
 		this.accessToken = accessToken;
 	}
 
+	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
@@ -134,6 +142,7 @@ public class MallUserEntity implements Serializable {
 		this.password = password;
 	}
 
+	@JsonIgnore
 	public String getMobile() {
 		return mobile;
 	}
@@ -142,6 +151,7 @@ public class MallUserEntity implements Serializable {
 		this.mobile = mobile;
 	}
 
+	@JsonIgnore
 	public String getAppVersion() {
 		return appVersion;
 	}
@@ -150,6 +160,7 @@ public class MallUserEntity implements Serializable {
 		this.appVersion = appVersion;
 	}
 
+	@JsonIgnore
 	public String getLastOpIP() {
 		return lastOpIP;
 	}
@@ -158,6 +169,7 @@ public class MallUserEntity implements Serializable {
 		this.lastOpIP = lastOpIP;
 	}
 
+	@JsonIgnore
 	public String getLastLoginTime() {
 		return lastLoginTime;
 	}
