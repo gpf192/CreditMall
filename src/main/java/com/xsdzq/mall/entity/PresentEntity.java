@@ -45,7 +45,7 @@ public class PresentEntity implements Serializable {
 	@Column(name = "value", precision = 2)
 	private float value;
 
-	@Lob
+	//@Lob
 	@Column(name = "image")
 	private String image;
 
