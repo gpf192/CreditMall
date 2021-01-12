@@ -122,6 +122,7 @@ public class MallUserServiceImpl implements MallUserService {
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 			TokenRecordEntity tokenRecordEntity = new TokenRecordEntity();
 			tokenRecordEntity.setClientId(clientId);
 			tokenRecordEntity.setLoginClientId(loginClientId);
