@@ -12,13 +12,15 @@ import org.apache.commons.codec.binary.Base64;
 public class AESUtil {
 
 	// 本地和测试
-	// public static String AES_KEY = "12345licaikmh666"; // 16位
-	// public static String AES_IV = "weqaApwQfg9MMPPe"; // 16位
+	public static String AES_KEY = "12345licaikmh66612345licaikmh666"; // 16位
+	public static String AES_IV = "weqaApwQfg9MMPPe"; // 16位
 	// 生产
-	public static String AES_KEY = "XsdzqKmh2021888Q"; // 16位
-	public static String AES_IV = "KmhnApwQfg88FXPv"; // 16位
+	// public static String AES_KEY = "XsdzqKmh2021888QXsdzqKmh2021888Q"; // 16位
+	// public static String AES_IV = "KmhnApwQfg88FXPv"; // 16位
 
 	public static String AES_NO_PADDING = "AES/CBC/NOPadding"; // js 和java同时采用无模式
+	
+	public static String ALGORITHM = "AES/CBC/PKCS5Padding";
 
 	public static void main(String args[]) throws Exception {
 		String dataString = "Dv4qpFnTebgZRNH3Lk3B+1I48P77lgdrH97JzG2J+Wv0FoWOSwKuOsRF7TuWlcV2lxfvMeDMNx+GoFsHj1L4c5G8k8LxZ5/alCRVIdUZHHVOg1BicE2MA31TaXVyglUXWgbHiw43Y5bP/m0c7GYJ85NsShJdIYB8LhHnXrMs3pPyKehMVCGfNndB5A5zNTtjn51n/oWOj63Knng/RKGa52oTrqdz96Zf1HypM3AEFWteKVfHRQnHTri5kTfEDbvyfRssTmCydWHI2yRWEyzmt5VB7s3GrxrcwSwjDjGNZFBaRt5juJ6s7cz1wMumsUA5+TdmUVm7lHYp+W1O6mr5iZF0QQdPGnZcDt/2WRur2cIxUxqNdEBiwpRZr/jKhrP6slU8QnoFetyX7f+HY77c3ObrPolz3BLGpiOEmMs5qsk5blgWX5c4e14kmtJCPW/L/Wj6Bw5+rq8DWWgYyj+2w/ZE+bUgcv8E1fi7X08IXg4yAXJf9Sdr04VPUFrdmnZ1XuZWN25qPkR6rUUtIXHIafSx66+AEIZCJZiUp8rxQ+0";
@@ -68,6 +70,27 @@ public class AESUtil {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public static String decryptAES256(String data) {
+		try {
+			byte[] encrypted = Base64.decodeBase64(data);
+			Cipher cipher = Cipher.getInstance(ALGORITHM);
+			SecretKeySpec keySpec = new SecretKeySpec(AES_KEY.getBytes(), "AES");
+			IvParameterSpec ivspec = new IvParameterSpec(AES_IV.getBytes());
+
+			cipher.init(Cipher.DECRYPT_MODE, keySpec, ivspec);
+			byte[] original = cipher.doFinal(encrypted);
+			String originalString = new String(original);
+			
+			return originalString;
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return null;
+
 	}
 
 	public static String getUuid() throws Exception {

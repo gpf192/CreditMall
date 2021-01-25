@@ -49,7 +49,7 @@ public class MallUserController {
 		String cryptUserString = userData.getEncryptData().trim();
 		String userString;
 		try {
-			userString = AESUtil.decryptAES(cryptUserString);
+			userString = AESUtil.decryptAES256(cryptUserString);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -77,6 +77,10 @@ public class MallUserController {
 
 		if (user.getLoginClientId() == null || user.getLoginClientId().equals("")) {
 			return GsonUtil.buildMap(1, "登录标示不能为空", null);
+		}
+		
+		if (user.getMobile() == null || user.getMobile().length() < 10) {
+			return GsonUtil.buildMap(1, "手机号不能为空", null);
 		}
 
 		ActivityNumber activityNumber = mallUserService.login(user);

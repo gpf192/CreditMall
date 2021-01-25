@@ -41,7 +41,7 @@ public class UserUtil {
 		// userEntity.setClientId(user.getClientId());
 		userEntity.setLoginClentId(user.getLoginClientId());
 		userEntity.setClientName(user.getClientName());
-		// userEntity.setFundAccount(user.getFundAccount());
+		userEntity.setFundAccount(user.getFundAccount());
 		userEntity.setAccessToken(user.getAccessToken());
 		userEntity.setMobile(user.getMobile());
 		userEntity.setAppVersion(user.getAppVersion());
