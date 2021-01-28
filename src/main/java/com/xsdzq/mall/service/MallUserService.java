@@ -28,6 +28,4 @@ public interface MallUserService {
 
 	public MallUserInfoEntity findByMallUserEntity(MallUserEntity mallUserEntity);
 
-	public void addCreditScore();
-
 }
