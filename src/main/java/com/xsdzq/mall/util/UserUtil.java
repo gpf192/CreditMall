@@ -40,7 +40,9 @@ public class UserUtil {
 	public static void updateUserEntityByUser(MallUserEntity userEntity, User user) {
 		// userEntity.setClientId(user.getClientId());
 		userEntity.setLoginClentId(user.getLoginClientId());
-		userEntity.setClientName(user.getClientName());
+		if (userEntity.getClientName() == null || userEntity.getClientName() == "") {
+			userEntity.setClientName(user.getClientName());
+		}
 		userEntity.setFundAccount(user.getFundAccount());
 		userEntity.setAccessToken(user.getAccessToken());
 		userEntity.setMobile(user.getMobile());

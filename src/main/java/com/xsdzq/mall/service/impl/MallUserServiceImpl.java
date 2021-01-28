@@ -190,6 +190,11 @@ public class MallUserServiceImpl implements MallUserService {
 			mallUserInfoEntity.setLevel(0);
 			mallUserInfoRepository.save(mallUserInfoEntity);
 		} else {
+			if (requestUser.getClientName() != null && requestUser.getClientName().length() > 1) {
+				if (!requestUser.getClientName().equals(user.getClientName())) {
+					return null;
+				}
+			}
 			mallUserInfoEntity = mallUserInfoRepository.findByMallUserEntity(requestUser);
 			UserUtil.updateUserEntityByUser(requestUser, user);
 			mallUserRepository.saveAndFlush(requestUser);
