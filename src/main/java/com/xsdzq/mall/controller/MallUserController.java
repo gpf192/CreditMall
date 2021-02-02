@@ -28,8 +28,8 @@ import com.xsdzq.mall.model.UserData;
 import com.xsdzq.mall.model.UserScoreNumber;
 import com.xsdzq.mall.service.MallUserService;
 import com.xsdzq.mall.service.TokenService;
-import com.xsdzq.mall.util.AESUtil;
 import com.xsdzq.mall.util.GsonUtil;
+import com.xsdzq.mall.util.RSAUtil;
 import com.xsdzq.mall.util.UserUtil;
 
 @RestController
@@ -49,7 +49,8 @@ public class MallUserController {
 		String cryptUserString = userData.getEncryptData().trim();
 		String userString;
 		try {
-			userString = AESUtil.decryptAES256(cryptUserString);
+			//userString = AESUtil.decryptAES256(cryptUserString);
+			userString = RSAUtil.decrypt(cryptUserString);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -79,8 +80,8 @@ public class MallUserController {
 			return GsonUtil.buildMap(1, "登录信息为空，请重新登录", null);
 		}
 
-		if (user.getLoginClientId() == null || user.getLoginClientId().equals("")) {
-			return GsonUtil.buildMap(1, "登录标示不能为空", null);
+		if (user.getLoginClientId() == null || user.getLoginClientId().length() <3) {
+			return GsonUtil.buildMap(1, "您的APP版本过低，请升级参加活动！", null);
 		}
 
 		if (user.getMobile() == null || user.getMobile().length() < 10) {
