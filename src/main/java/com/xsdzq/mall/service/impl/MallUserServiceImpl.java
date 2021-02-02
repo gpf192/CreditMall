@@ -141,6 +141,9 @@ public class MallUserServiceImpl implements MallUserService {
 	public boolean checkUserByClientId(String loginClientId) {
 		List<MallUserEntity> mallUserEntities = mallUserRepository.findByLoginClentId(loginClientId);
 		log.info(loginClientId + " total size " + mallUserEntities.size());
+		if (mallUserEntities.size() < 10) {
+			return true;
+		}
 		int todaySize = 0;
 		Date nowDate = new Date();
 		for (MallUserEntity mallUserEntity : mallUserEntities) {
@@ -190,7 +193,10 @@ public class MallUserServiceImpl implements MallUserService {
 			mallUserInfoEntity.setLevel(0);
 			mallUserInfoRepository.save(mallUserInfoEntity);
 		} else {
+			log.info(requestUser.toString());
 			if (requestUser.getClientName() != null && requestUser.getClientName().length() > 1) {
+				log.info("client name: " + user.getClientName());
+				log.info("service name: " + requestUser.getClientName());
 				if (!requestUser.getClientName().trim().equals(user.getClientName().trim())) {
 					return null;
 				}
