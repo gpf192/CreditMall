@@ -3,6 +3,7 @@ package com.xsdzq.mall.model;
 public class UserData {
 	private String encryptData;
 	private String encryptData2;
+	private String appVersion;
 	private String lastOpIP;
 	private String lastLoginTime;
 
@@ -31,6 +32,14 @@ public class UserData {
 		this.encryptData2 = encryptData2;
 	}
 
+	public String getAppVersion() {
+		return appVersion;
+	}
+
+	public void setAppVersion(String appVersion) {
+		this.appVersion = appVersion;
+	}
+
 	public String getLastOpIP() {
 		return lastOpIP;
 	}
@@ -49,8 +58,8 @@ public class UserData {
 
 	@Override
 	public String toString() {
-		return "UserData [encryptData=" + encryptData + ", encryptData2=" + encryptData2 + ", lastOpIP=" + lastOpIP
-				+ ", lastLoginTime=" + lastLoginTime + "]";
+		return "UserData [encryptData=" + encryptData + ", encryptData2=" + encryptData2 + ", appVersion=" + appVersion
+				+ ", lastOpIP=" + lastOpIP + ", lastLoginTime=" + lastLoginTime + "]";
 	}
 
 }

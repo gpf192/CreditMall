@@ -193,7 +193,6 @@ public class MallUserServiceImpl implements MallUserService {
 			mallUserInfoEntity.setLevel(0);
 			mallUserInfoRepository.save(mallUserInfoEntity);
 		} else {
-			log.info(requestUser.toString());
 			if (requestUser.getClientName() != null && requestUser.getClientName().length() > 1) {
 				log.info("client name: " + user.getClientName());
 				log.info("service name: " + requestUser.getClientName());

@@ -66,11 +66,12 @@ public class MallUserController {
 		try {
 			user = JSON.parseObject(userString, User.class);
 			user2 = JSON.parseObject(userString2, User.class);
-			user.setLoginClientId(user2.getLoginClientId());
 			user.setClientId(user2.getClientId());
 			user.setClientName(user2.getClientName());
-			user.setAppVersion(user2.getAppVersion());
-			user.setLastOpIP(userData.getEncryptData());
+			user.setFundAccount(user2.getFundAccount());
+			user.setMobile(user2.getMobile());
+			user.setAppVersion(userData.getAppVersion());
+			user.setLastOpIP(userData.getLastOpIP());
 			user.setLastLoginTime(userData.getLastLoginTime());
 		} catch (Exception e) {
 			// TODO: handle exception
