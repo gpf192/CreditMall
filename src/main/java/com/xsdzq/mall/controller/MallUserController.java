@@ -47,19 +47,32 @@ public class MallUserController {
 	@PostMapping(value = "/login")
 	public Map<String, Object> login(@RequestBody UserData userData) {
 		String cryptUserString = userData.getEncryptData().trim();
+		String cryptUserString2 = userData.getEncryptData2().trim();
 		String userString;
+		String userString2;
 		try {
-			//userString = AESUtil.decryptAES256(cryptUserString);
+			// userString = AESUtil.decryptAES256(cryptUserString);
 			userString = RSAUtil.decrypt(cryptUserString);
+			userString2 = RSAUtil.decrypt(cryptUserString2);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return GsonUtil.buildMap(1, "登录失败", null);
 		}
 		log.info(userString);
+		log.info(userString2);
 		User user = null;
+		User user2 = null;
 		try {
 			user = JSON.parseObject(userString, User.class);
+			user2 = JSON.parseObject(userString2, User.class);
+			user.setClientId(user2.getClientId());
+			user.setClientName(user2.getClientName());
+			user.setFundAccount(user2.getFundAccount());
+			user.setMobile(user2.getMobile());
+			user.setAppVersion(userData.getAppVersion());
+			user.setLastOpIP(userData.getLastOpIP());
+			user.setLastLoginTime(userData.getLastLoginTime());
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -80,7 +93,7 @@ public class MallUserController {
 			return GsonUtil.buildMap(1, "登录信息为空，请重新登录", null);
 		}
 
-		if (user.getLoginClientId() == null || user.getLoginClientId().length() <3) {
+		if (user.getLoginClientId() == null || user.getLoginClientId().length() < 3) {
 			return GsonUtil.buildMap(1, "您的APP版本过低，请升级参加活动！", null);
 		}
 
