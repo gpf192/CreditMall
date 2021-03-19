@@ -19,6 +19,7 @@ import com.xsdzq.mall.annotation.UserLoginToken;
 import com.xsdzq.mall.entity.MallUserEntity;
 import com.xsdzq.mall.entity.MallUserInfoEntity;
 import com.xsdzq.mall.entity.PresentCardEntity;
+import com.xsdzq.mall.entity.UserBlackListEntity;
 import com.xsdzq.mall.model.ActivityNumber;
 import com.xsdzq.mall.model.PreExchangePresent;
 import com.xsdzq.mall.model.PresentModel;
@@ -28,6 +29,7 @@ import com.xsdzq.mall.model.UserData;
 import com.xsdzq.mall.model.UserScoreNumber;
 import com.xsdzq.mall.service.MallUserService;
 import com.xsdzq.mall.service.TokenService;
+import com.xsdzq.mall.service.UserBlackListService;
 import com.xsdzq.mall.util.GsonUtil;
 import com.xsdzq.mall.util.RSAUtil;
 import com.xsdzq.mall.util.UserUtil;
@@ -40,6 +42,9 @@ public class MallUserController {
 
 	@Autowired
 	private MallUserService mallUserService;
+
+	@Autowired
+	UserBlackListService userBlackListService;
 
 	@Autowired
 	private TokenService tokenService;
@@ -99,6 +104,12 @@ public class MallUserController {
 
 		if (user.getMobile() == null || user.getMobile().length() < 10) {
 			return GsonUtil.buildMap(1, "手机号不能为空", null);
+		}
+		// 先校验黑名单
+
+		UserBlackListEntity blackUser = userBlackListService.getBlackListEntityByClientId(user.getClientId());
+		if (blackUser != null) {
+			return GsonUtil.buildMap(2, "用户账户异常", null);
 		}
 
 		ActivityNumber activityNumber = mallUserService.login(user);
