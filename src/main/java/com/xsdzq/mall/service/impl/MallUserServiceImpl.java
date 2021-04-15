@@ -292,10 +292,14 @@ public class MallUserServiceImpl implements MallUserService {
 		// 0.兑换条件检测
 		checkExchangePresent(mallUserEntity, presentEntity, nowDateStr, prizeNumber);
 
+		int fullTime = DateUtil.getIntegerTime(new Date());
 		// 1.查询出未兑换的cardList
+		// List<PresentCardEntity> presentCardList = presentCardRepository
+		// .findByPresentEntityAndConvertStatus(presentEntity,
+		// PresentCardConst.CARD_UNUSED);
 		List<PresentCardEntity> presentCardList = presentCardRepository
-				.findByPresentEntityAndConvertStatus(presentEntity, PresentCardConst.CARD_UNUSED);
-
+				.findByPresentEntityAndConvertStatusAndExpiryTimeGreaterThanOrderByExpiryTime(presentEntity,
+						PresentCardConst.CARD_UNUSED, fullTime);
 		if (presentCardList.size() >= prizeNumber) {
 			int sumScore = (int) (presentEntity.getValue() * 100 * prizeNumber);
 			// a.用户减少积分

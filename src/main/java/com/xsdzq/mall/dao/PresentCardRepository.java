@@ -10,7 +10,8 @@ import com.xsdzq.mall.entity.PresentEntity;
 
 public interface PresentCardRepository extends JpaRepository<PresentCardEntity, Long> {
 
-	List<PresentCardEntity> findByPresentEntityAndConvertStatus(PresentEntity presentEntity, int convertStatus);
+	List<PresentCardEntity> findByPresentEntityAndConvertStatusAndExpiryTimeGreaterThanOrderByExpiryTime(
+			PresentEntity presentEntity, int convertStatus, int expiryTime);
 
 	List<PresentCardEntity> findByConvertDate(Date convertDate);
 
