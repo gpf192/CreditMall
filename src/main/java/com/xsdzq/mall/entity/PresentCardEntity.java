@@ -49,7 +49,6 @@ public class PresentCardEntity implements Serializable {
 	@Column(name = "convert_status")
 	private int convertStatus;
 
-
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH }, fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "present_id", referencedColumnName = "id")
 	private PresentEntity presentEntity;
@@ -58,6 +57,9 @@ public class PresentCardEntity implements Serializable {
 	@CreatedDate
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createDate;
+
+	@Column(name = "expiry_time")
+	private int expiryTime;// 失效时间
 
 	@Column(name = "convert_date")
 	private Date convertDate;
@@ -69,7 +71,6 @@ public class PresentCardEntity implements Serializable {
 	public void setId(long id) {
 		this.id = id;
 	}
-
 
 	public String getCardId() {
 		return cardId;
@@ -117,6 +118,14 @@ public class PresentCardEntity implements Serializable {
 
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+
+	public int getExpiryTime() {
+		return expiryTime;
+	}
+
+	public void setExpiryTime(int expiryTime) {
+		this.expiryTime = expiryTime;
 	}
 
 	public Date getConvertDate() {
