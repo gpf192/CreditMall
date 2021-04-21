@@ -298,7 +298,7 @@ public class MallUserServiceImpl implements MallUserService {
 		// .findByPresentEntityAndConvertStatus(presentEntity,
 		// PresentCardConst.CARD_UNUSED);
 		List<PresentCardEntity> presentCardList = presentCardRepository
-				.findByPresentEntityAndConvertStatusAndExpiryTimeGreaterThanOrderByExpiryTime(presentEntity,
+				.findByPresentEntityAndConvertStatusAndExpiryTimeGreaterThanOrderByExpiryTimeAscCreateDateDesc(presentEntity,
 						PresentCardConst.CARD_UNUSED, fullTime);
 		if (presentCardList.size() >= prizeNumber) {
 			int sumScore = (int) (presentEntity.getValue() * 100 * prizeNumber);
