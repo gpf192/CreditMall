@@ -1,10 +1,12 @@
 package com.xsdzq.mall.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -298,8 +300,8 @@ public class MallUserServiceImpl implements MallUserService {
 		// .findByPresentEntityAndConvertStatus(presentEntity,
 		// PresentCardConst.CARD_UNUSED);
 		List<PresentCardEntity> presentCardList = presentCardRepository
-				.findByPresentEntityAndConvertStatusAndExpiryTimeGreaterThanOrderByExpiryTimeAscCreateDateDesc(presentEntity,
-						PresentCardConst.CARD_UNUSED, fullTime);
+				.findByPresentEntityAndConvertStatusAndExpiryTimeGreaterThanOrderByExpiryTimeAscCreateDateDesc(
+						presentEntity, PresentCardConst.CARD_UNUSED, fullTime);
 		if (presentCardList.size() >= prizeNumber) {
 			int sumScore = (int) (presentEntity.getValue() * 100 * prizeNumber);
 			// a.用户减少积分
@@ -375,6 +377,11 @@ public class MallUserServiceImpl implements MallUserService {
 
 	public void checkExchangePresent(MallUserEntity mallUserEntity, PresentEntity presentEntity, String nowDate,
 			int prizeNumber) {
+		// 0.检查是否下架
+		if (presentEntity.getStatus().equals("1")) {
+			throw new BusinessException("商品已经下架！");
+		}
+
 		// 1.检查库存
 		if (presentEntity.getStoreUnused() < prizeNumber) {
 			throw new BusinessException("超过最大兑换数量！");
@@ -440,7 +447,17 @@ public class MallUserServiceImpl implements MallUserService {
 		PresentResultEntity presentResultEntity = presentResultRepository.findById(resultId).get();
 		List<PresentCardEntity> presentCardEntities = presentCardRepository
 				.findByConvertDate(presentResultEntity.getRecordTime());
-		return presentCardEntities;
+
+		List<PresentCardEntity> reponsEntities = new ArrayList<PresentCardEntity>();
+		for (int i = 0; i < presentCardEntities.size(); i++) {
+			PresentCardEntity target = new PresentCardEntity();
+			PresentCardEntity source = presentCardEntities.get(i);
+			BeanUtils.copyProperties(source, target);
+			target.setExpiryTime(DateUtil.getReduceDate(String.valueOf(source.getExpiryTime())));
+			reponsEntities.add(target);
+
+		}
+		return reponsEntities;
 
 	}
 
