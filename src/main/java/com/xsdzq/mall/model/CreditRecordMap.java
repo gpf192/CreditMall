@@ -8,6 +8,8 @@ public class CreditRecordMap {
 
 	private int sumUsedScore;
 
+	private int frozenIntegral;
+
 	private List<CreditRecordMonth> creditRecordMonths;
 
 	public int getSumScore() {
@@ -34,4 +36,11 @@ public class CreditRecordMap {
 		this.creditRecordMonths = creditRecordMonths;
 	}
 
+	public int getFrozenIntegral() {
+		return frozenIntegral;
+	}
+
+	public void setFrozenIntegral(int frozenIntegral) {
+		this.frozenIntegral = frozenIntegral;
+	}
 }

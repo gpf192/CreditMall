@@ -1,43 +1,13 @@
 package com.xsdzq.mall.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.xsdzq.mall.constants.CreditRecordConst;
+import com.xsdzq.mall.constants.OrderStatusEnum;
 import com.xsdzq.mall.constants.PresentCardConst;
 import com.xsdzq.mall.constants.PresentConst;
-import com.xsdzq.mall.dao.CreditRecordRepository;
-import com.xsdzq.mall.dao.MallUserInfoRepository;
-import com.xsdzq.mall.dao.MallUserRepository;
-import com.xsdzq.mall.dao.PresentCardRepository;
-import com.xsdzq.mall.dao.PresentRecordRepository;
-import com.xsdzq.mall.dao.PresentRepository;
-import com.xsdzq.mall.dao.PresentResultRepository;
-import com.xsdzq.mall.dao.TokenRecordRepository;
-import com.xsdzq.mall.entity.CreditRecordEntity;
-import com.xsdzq.mall.entity.MallUserEntity;
-import com.xsdzq.mall.entity.MallUserInfoEntity;
-import com.xsdzq.mall.entity.PresentCardEntity;
-import com.xsdzq.mall.entity.PresentEntity;
-import com.xsdzq.mall.entity.PresentRecordEntity;
-import com.xsdzq.mall.entity.PresentResultEntity;
-import com.xsdzq.mall.entity.TokenRecordEntity;
+import com.xsdzq.mall.dao.*;
+import com.xsdzq.mall.entity.*;
 import com.xsdzq.mall.exception.BusinessException;
 import com.xsdzq.mall.model.ActivityNumber;
 import com.xsdzq.mall.model.PreExchangePresent;
@@ -47,6 +17,20 @@ import com.xsdzq.mall.properties.HSURLProperties;
 import com.xsdzq.mall.service.MallUserService;
 import com.xsdzq.mall.util.DateUtil;
 import com.xsdzq.mall.util.UserUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.client.RestTemplate;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -83,6 +67,9 @@ public class MallUserServiceImpl implements MallUserService {
 
 	@Autowired
 	private RestTemplate restTemplate;
+
+	@Resource
+	private OrderRepository orderRepository;
 
 	public boolean hsServiceCheck(String clientId, String loginClientId, String accessToken, String mobile) {
 		HttpHeaders headers = new HttpHeaders();
@@ -208,6 +195,10 @@ public class MallUserServiceImpl implements MallUserService {
 		}
 		ActivityNumber activityNumber = new ActivityNumber();
 		activityNumber.setScoreNumber(mallUserInfoEntity.getCreditScore());
+
+		// 获取用户当日剩余积分金额
+		double currentValue = getCurrentDayValue(requestUser, DateUtil.getStandardDate(new Date()));
+		activityNumber.setPriceDayQuota(Double.valueOf(currentValue).intValue());
 		return activityNumber;
 
 	}
@@ -402,8 +393,18 @@ public class MallUserServiceImpl implements MallUserService {
 		for (PresentResultEntity presentResultEntity : myPresentResultEntities) {
 			usedValue += presentResultEntity.getValue();
 		}
-		return PresentConst.QUOTANUMBER - usedValue;
 
+		List<MallOrderEntity> orderList = orderRepository.findByClientIdAndTradeDate(mallUserEntity.getClientId(), Integer.valueOf(nowDate.replaceAll("-", "")));
+		if (!CollectionUtils.isEmpty(orderList)) {
+			for (MallOrderEntity order : orderList) {
+				if (!OrderStatusEnum.FAILURE.getCode().equals(order.getOrderStatus())) {
+					int integralAmount = order.getUseIntegral() / 100;
+					usedValue += integralAmount;
+				}
+			}
+		}
+
+		return PresentConst.QUOTANUMBER - usedValue;
 	}
 
 	void handleRudeceCredit(MallUserEntity mallUserEntity, int reduceScore) {

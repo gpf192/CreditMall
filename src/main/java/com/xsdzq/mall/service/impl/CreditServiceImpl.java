@@ -1,5 +1,6 @@
  package com.xsdzq.mall.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,6 +107,7 @@ public class CreditServiceImpl implements CreditService {
 		creditRecordMap.setSumUsedScore(myUsedSumScore);
 		creditRecordMap.setSumScore(myMallUserInfoEntity.getCreditScore());
 		creditRecordMap.setCreditRecordMonths(recordMothList);
+		creditRecordMap.setFrozenIntegral(myMallUserInfoEntity.getFrozenIntegral());
 
 		return creditRecordMap;
 	}
@@ -136,7 +138,7 @@ public class CreditServiceImpl implements CreditService {
 
 		ResultNumber resultNumber = new ResultNumber();
 		resultNumber.setUsedScore(usedScore);
-		resultNumber.setUsedValue(usedValue);
+		resultNumber.setUsedValue(new BigDecimal(usedValue));
 
 		List<ResultCountEntity> resultCounts = presentResultRepository.findResultCountList(mallUserEntity);
 		presentResult.setResultNumber(resultNumber);

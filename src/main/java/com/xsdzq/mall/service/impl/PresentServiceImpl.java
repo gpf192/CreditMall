@@ -48,6 +48,7 @@ public class PresentServiceImpl implements PresentService {
 			String clientId = presentResultEntity.getMallUserEntity().getClientId();
 			presentLatestResult.setClientId(PresentUtil.getInstance().getSecretName(clientId));
 			presentLatestResult.setPrizeName(presentResultEntity.getPresentEntity().getName());
+			presentLatestResult.setRecordTime(presentResultEntity.getRecordTime());
 			presentResultList.add(presentLatestResult);
 
 		}

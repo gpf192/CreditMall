@@ -1,24 +1,25 @@
 package com.xsdzq.mall.controller;
 
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.xsdzq.mall.annotation.UserLoginToken;
 import com.xsdzq.mall.entity.CRMCreditProductViewEntity;
 import com.xsdzq.mall.entity.CreditRecordEntity;
 import com.xsdzq.mall.entity.MallUserEntity;
 import com.xsdzq.mall.model.CreditRecordMap;
+import com.xsdzq.mall.model.MyExchangeRecordRespDTO;
 import com.xsdzq.mall.model.PresentResult;
+import com.xsdzq.mall.model.ResultNumber;
 import com.xsdzq.mall.service.CreditService;
+import com.xsdzq.mall.service.OrderService;
 import com.xsdzq.mall.service.TokenService;
 import com.xsdzq.mall.util.GsonUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/mall/credit")
@@ -29,6 +30,9 @@ public class CreditController {
 
 	@Autowired
 	private TokenService tokenService;
+
+	@Resource
+	private OrderService orderService;
 
 	@GetMapping(value = "/record")
 	@UserLoginToken
@@ -63,4 +67,21 @@ public class CreditController {
 		return GsonUtil.buildMap(0, "success", entities);
 	}
 
+	@GetMapping(value = "/composite-result")
+	@UserLoginToken
+	public Map<String, Object> getOrder(@RequestHeader("Authorization") String token) {
+		MallUserEntity mallUserEntity = tokenService.getMallUserEntity(token);
+		PresentResult presentResult = creditService.getPresentResultEntities(mallUserEntity);
+
+		List<MyExchangeRecordRespDTO> userExchangeRecord = orderService.getUserExchangeRecord(mallUserEntity);
+		if (!CollectionUtils.isEmpty(userExchangeRecord)) {
+			ResultNumber resultNumber = presentResult.getResultNumber();
+			for (MyExchangeRecordRespDTO mer : userExchangeRecord) {
+				resultNumber.setUsedScore(mer.getUseIntegral()+resultNumber.getUsedScore());
+				resultNumber.setUsedValue(mer.getExchangePrice().add(resultNumber.getUsedValue()));
+			}
+		}
+		presentResult.setMyExchangeRecordRespDTO(userExchangeRecord);
+		return GsonUtil.buildMap(0, "success", presentResult);
+	}
 }

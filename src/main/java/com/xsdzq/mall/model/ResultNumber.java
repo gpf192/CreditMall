@@ -1,9 +1,11 @@
 package com.xsdzq.mall.model;
 
+import java.math.BigDecimal;
+
 public class ResultNumber {
 
 	private int usedScore;
-	private double usedValue;
+	private BigDecimal usedValue;
 
 	public int getUsedScore() {
 		return usedScore;
@@ -13,11 +15,11 @@ public class ResultNumber {
 		this.usedScore = usedScore;
 	}
 
-	public double getUsedValue() {
+	public BigDecimal getUsedValue() {
 		return usedValue;
 	}
 
-	public void setUsedValue(double usedValue) {
+	public void setUsedValue(BigDecimal usedValue) {
 		this.usedValue = usedValue;
 	}
 

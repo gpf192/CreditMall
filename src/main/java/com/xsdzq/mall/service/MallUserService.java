@@ -28,4 +28,6 @@ public interface MallUserService {
 
 	public MallUserInfoEntity findByMallUserEntity(MallUserEntity mallUserEntity);
 
+	public double getCurrentDayValue(MallUserEntity mallUserEntity, String nowDate);
+
 }

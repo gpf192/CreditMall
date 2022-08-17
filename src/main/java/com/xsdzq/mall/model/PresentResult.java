@@ -9,6 +9,8 @@ public class PresentResult {
 
 	private ResultNumber resultNumber;
 
+	private List<MyExchangeRecordRespDTO> myExchangeRecordRespDTO;
+
 	private List<PresentResultEntity> presentResultList;
 
 	private List<ResultCountEntity> resultCountList;
@@ -37,4 +39,11 @@ public class PresentResult {
 		this.resultCountList = resultCountList;
 	}
 
+	public List<MyExchangeRecordRespDTO> getMyExchangeRecordRespDTO() {
+		return myExchangeRecordRespDTO;
+	}
+
+	public void setMyExchangeRecordRespDTO(List<MyExchangeRecordRespDTO> myExchangeRecordRespDTO) {
+		this.myExchangeRecordRespDTO = myExchangeRecordRespDTO;
+	}
 }

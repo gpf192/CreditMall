@@ -60,6 +60,13 @@ public class MallUserInfoEntity implements Serializable {
 	@LastModifiedDate
 	private Date modifytime;
 
+	@Column(name = "client_id", insertable = false, updatable = false)
+	private String clientId;
+
+	// 冻结积分
+	@Column(name = "frozen_integral",columnDefinition = "int default 0")
+	private Integer frozenIntegral = 0;
+
 	public Long getId() {
 		return id;
 	}
@@ -69,7 +76,7 @@ public class MallUserInfoEntity implements Serializable {
 	}
 
 	public int getCreditScore() {
-		return creditScore;
+		return creditScore - frozenIntegral;
 	}
 
 	public void setCreditScore(int creditScore) {
@@ -117,4 +124,19 @@ public class MallUserInfoEntity implements Serializable {
 		this.modifytime = modifytime;
 	}
 
+	public Integer getFrozenIntegral() {
+		return frozenIntegral;
+	}
+
+	public void setFrozenIntegral(Integer frozenIntegral) {
+		this.frozenIntegral = frozenIntegral;
+	}
+
+	public String getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
+	}
 }

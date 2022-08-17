@@ -1,38 +1,28 @@
 package com.xsdzq.mall.controller;
 
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.alibaba.fastjson.JSON;
 import com.xsdzq.mall.annotation.UserLoginToken;
 import com.xsdzq.mall.entity.MallUserEntity;
 import com.xsdzq.mall.entity.MallUserInfoEntity;
 import com.xsdzq.mall.entity.PresentCardEntity;
 import com.xsdzq.mall.entity.UserBlackListEntity;
-import com.xsdzq.mall.model.ActivityNumber;
-import com.xsdzq.mall.model.PreExchangePresent;
-import com.xsdzq.mall.model.PresentModel;
-import com.xsdzq.mall.model.PresentModelNumber;
-import com.xsdzq.mall.model.User;
-import com.xsdzq.mall.model.UserData;
-import com.xsdzq.mall.model.UserScoreNumber;
+import com.xsdzq.mall.model.*;
 import com.xsdzq.mall.service.MallUserService;
+import com.xsdzq.mall.service.OrderService;
 import com.xsdzq.mall.service.TokenService;
 import com.xsdzq.mall.service.UserBlackListService;
 import com.xsdzq.mall.util.GsonUtil;
 import com.xsdzq.mall.util.RSAUtil;
 import com.xsdzq.mall.util.UserUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/mall/user")
@@ -48,6 +38,9 @@ public class MallUserController {
 
 	@Autowired
 	private TokenService tokenService;
+
+	@Resource
+	private OrderService orderService;
 
 	@PostMapping(value = "/login")
 	public Map<String, Object> login(@RequestBody UserData userData) {
@@ -160,6 +153,29 @@ public class MallUserController {
 		List<PresentCardEntity> presentCardEntities = mallUserService.getPresentCardEntities(resultId);
 		return GsonUtil.buildMap(0, "ok", presentCardEntities);
 
+	}
+
+	@PostMapping(value = "/direct-recharge-exchange")
+	@UserLoginToken
+	public Map<String, Object> exchangeDirectRechargePrize(@RequestHeader("Authorization") String token,
+														   @RequestBody ExchangePrizeReqDTO exchangePrizeReqDTO) {
+		MallUserEntity mallUserEntity = tokenService.getMallUserEntity(token);
+		if (mallUserEntity == null) {
+			return GsonUtil.buildMap(1, "非法访问", null);
+		}
+
+		if (exchangePrizeReqDTO == null ||
+				(StringUtils.isEmpty(exchangePrizeReqDTO.getOrderNo()) &&
+						(exchangePrizeReqDTO.getRechargeNumber() == null ||
+								exchangePrizeReqDTO.getGoodsTypeId() == null ||
+								exchangePrizeReqDTO.getGoodsNo() == null ||
+								exchangePrizeReqDTO.getRequestTime() == null
+						))) {
+			return GsonUtil.buildMap(1, "必输项为空", null);
+		}
+
+		ExchangePrizeRespDTO exchangePrizeRespDTO = orderService.exchangePrize(mallUserEntity, exchangePrizeReqDTO);
+		return GsonUtil.buildMap(0, "ok", exchangePrizeRespDTO);
 	}
 
 }
