@@ -13,7 +13,7 @@ import java.util.Date;
 @Entity
 @Table(name = "mall_order",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"order_no"}), @UniqueConstraint(columnNames = {"request_time","client_id"})},
-        indexes = {@Index(columnList = "client_id"), @Index(columnList = "trade_date")})
+        indexes = {@Index(columnList = "client_id"), @Index(columnList = "trade_date"), @Index(columnList = "create_time")})
 @DynamicInsert
 @DynamicUpdate
 @EntityListeners(AuditingEntityListener.class)

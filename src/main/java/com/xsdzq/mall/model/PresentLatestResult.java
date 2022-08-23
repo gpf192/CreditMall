@@ -1,5 +1,7 @@
 package com.xsdzq.mall.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class PresentLatestResult {
@@ -8,6 +10,7 @@ public class PresentLatestResult {
 	
 	private String prizeName;
 
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	private Date recordTime;
 
 	public String getClientId() {

@@ -174,31 +174,30 @@ public class OrderServiceImpl implements OrderService {
 
     private MallOrderEntity callPayTel(MallOrderEntity order) {
         PayTelReqEntity payTelReq = buildPayTelReq(order);
-        CommonRespEntity<PayTelRespEntity> payTelResp = null;
+        CommonRespEntity<PayTelRespEntity> commonResp = null;
         try {
-            payTelResp = directChargeService.payTel(payTelReq);
+            commonResp = directChargeService.payTel(payTelReq);
         } catch (Exception e) {
             logger.error("话费下单接口请求异常payTelReq:{}", JSON.toJSON(payTelReq), e);
-            payTelResp = new CommonRespEntity<>();
-            payTelResp.setCode(-1);
-            payTelResp.setMessage("话费下单接口请求异常");
+            commonResp = new CommonRespEntity<>();
+            commonResp.setCode(-1);
+            commonResp.setMessage("话费下单接口请求异常");
         }
         MallOrderEntity updateOrder = new MallOrderEntity();
         BeanUtils.copyProperties(order, updateOrder);
-        updateOrder.setId(order.getId());
-        updateOrder.setRechargeCode(payTelResp.getCode());
-        updateOrder.setRechargeMessage(payTelResp.getMessage());
+        updateOrder.setRechargeCode(commonResp.getCode());
+        updateOrder.setRechargeMessage(commonResp.getMessage());
         updateOrder.setUpdateTime(null);
         // 请求通过
-        if (payTelResp.getCode() == 7000) {
-            PayTelRespEntity data = payTelResp.getData();
+        if (commonResp.getCode() == 7000) {
+            PayTelRespEntity data = commonResp.getData();
             updateOrder.setOrderStatus(getOrderStatus(data.getState()));
             updateOrder.setStartTime(DateUtil.strToDate(data.getStart_time()));
             updateOrder.setEndTime(DateUtil.strToDate(data.getEnd_time()));
             updateOrder.setRechargeStatus(data.getState());
             updateOrder.setConsumeAmount(data.getConsume_amount());
             // 系统异常
-        } else if (payTelResp.getCode() == 7777 || payTelResp.getCode() == -1) {
+        } else if (commonResp.getCode() == 7777 || commonResp.getCode() == -1) {
             updateOrder.setOrderStatus(OrderStatusEnum.PROCESSING.getCode());
             // 失败
         } else {

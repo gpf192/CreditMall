@@ -7,6 +7,7 @@ import java.util.Date;
 public class ExchangeRecordRespDTO {
     private String clientId;
     private String prizeName;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date endTime;
 
     public String getClientId() {

@@ -1,11 +1,15 @@
 package com.xsdzq.mall.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class MyExchangeRecordRespDTO {
     private String groupTime;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date completeTime;
     private String goodsName;
     private BigDecimal rechargeAmount;

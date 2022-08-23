@@ -1,7 +1,7 @@
 package com.xsdzq.mall.constants;
 
 public enum BrandStatusEnum {
-    ON_SHELF(0, "初始状态"),
+    ON_SHELF(0, "上架"),
     OFF_SHELF(1, "下架"),
 
     ;

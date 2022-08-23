@@ -1,5 +1,7 @@
 package com.xsdzq.mall.entity;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -11,6 +13,8 @@ import java.util.Date;
 @Table(name = "mall_brand",
         uniqueConstraints = @UniqueConstraint(columnNames = {"goods_type_id"}))
 @EntityListeners(AuditingEntityListener.class)
+@DynamicInsert
+@DynamicUpdate
 public class MallBrandEntity {
 
     @Id
