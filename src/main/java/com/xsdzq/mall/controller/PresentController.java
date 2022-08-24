@@ -66,9 +66,9 @@ public class PresentController {
     }
 
     @GetMapping("/composite-hot")
-    public Map<String, Object> getHotProduct(@RequestHeader(value = "Authorization", required = false) String token) {
+    public Map<String, Object> getHotProduct(@RequestHeader("Authorization") String token) {
         MallUserEntity mallUserEntity = null;
-        if (token != null && !"".equals(token.trim())) {
+        if (token != null && !"".equals(token.trim()) && !"false".equals(token) && !"0".equals(token)) {
             mallUserEntity = tokenService.getMallUserEntity(token);
         }
         HotProductRespDTO hotProduct = new HotProductRespDTO();
@@ -116,9 +116,9 @@ public class PresentController {
     }
 
     @GetMapping("/category/composite-all")
-    public Map<String, Object> getAllProductCategory(@RequestHeader(value = "Authorization", required = false) String token) {
+    public Map<String, Object> getAllProductCategory(@RequestHeader("Authorization") String token) {
         MallUserEntity mallUserEntity = null;
-        if (token != null && !"".equals(token.trim())) {
+        if (token != null && !"".equals(token.trim()) && !"false".equals(token) && !"0".equals(token)) {
             mallUserEntity = tokenService.getMallUserEntity(token);
         }
         AllProductRespDTO allProduct = new AllProductRespDTO();
