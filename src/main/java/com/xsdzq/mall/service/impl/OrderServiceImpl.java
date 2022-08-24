@@ -219,7 +219,7 @@ public class OrderServiceImpl implements OrderService {
     private MallOrderEntity buildOrder(MallUserEntity user, ExchangePrizeReqDTO epReqDTO, MallBrandEntity brand, MallProductEntity product) {
         MallOrderEntity order = new MallOrderEntity();
         order.setClientName(user.getClientName());
-        order.setClientName(user.getClientName());
+        order.setClientId(user.getClientId());
         order.setTradeDate(DateUtil.getIntegerTime(new Date()));
         order.setRequestTime(epReqDTO.getRequestTime());
         order.setDepartmentCode(user.getDepartmentCode());

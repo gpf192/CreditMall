@@ -77,11 +77,15 @@ public class CreditController {
 		if (!CollectionUtils.isEmpty(userExchangeRecord)) {
 			ResultNumber resultNumber = presentResult.getResultNumber();
 			for (MyExchangeRecordRespDTO mer : userExchangeRecord) {
-				resultNumber.setUsedScore(mer.getUseIntegral()+resultNumber.getUsedScore());
-				resultNumber.setUsedValue(mer.getExchangePrice().add(resultNumber.getUsedValue()));
+				if (mer.getUseIntegral() != null) {
+					resultNumber.setUsedScore(mer.getUseIntegral() + resultNumber.getUsedScore());
+				}
+				if(mer.getExchangePrice() != null){
+					resultNumber.setUsedValue(mer.getExchangePrice().add(resultNumber.getUsedValue()));
+				}
 			}
 		}
-		presentResult.setMyExchangeRecordRespDTO(userExchangeRecord);
+		presentResult.setDirectRechargeResultList(userExchangeRecord);
 		return GsonUtil.buildMap(0, "success", presentResult);
 	}
 }

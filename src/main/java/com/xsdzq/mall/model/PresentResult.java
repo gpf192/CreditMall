@@ -9,7 +9,7 @@ public class PresentResult {
 
 	private ResultNumber resultNumber;
 
-	private List<MyExchangeRecordRespDTO> myExchangeRecordRespDTO;
+	private List<MyExchangeRecordRespDTO> directRechargeResultList;
 
 	private List<PresentResultEntity> presentResultList;
 
@@ -39,11 +39,11 @@ public class PresentResult {
 		this.resultCountList = resultCountList;
 	}
 
-	public List<MyExchangeRecordRespDTO> getMyExchangeRecordRespDTO() {
-		return myExchangeRecordRespDTO;
+	public List<MyExchangeRecordRespDTO> getDirectRechargeResultList() {
+		return directRechargeResultList;
 	}
 
-	public void setMyExchangeRecordRespDTO(List<MyExchangeRecordRespDTO> myExchangeRecordRespDTO) {
-		this.myExchangeRecordRespDTO = myExchangeRecordRespDTO;
+	public void setDirectRechargeResultList(List<MyExchangeRecordRespDTO> directRechargeResultList) {
+		this.directRechargeResultList = directRechargeResultList;
 	}
 }
