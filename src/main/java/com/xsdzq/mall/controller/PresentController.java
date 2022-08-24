@@ -24,7 +24,7 @@ import java.util.*;
 @RequestMapping(value = "/mall/present")
 public class PresentController {
 
-	private static final Logger logger = LoggerFactory.getLogger(PresentController.class);
+    private static final Logger logger = LoggerFactory.getLogger(PresentController.class);
 
     @Autowired
     private PresentService presentService;
@@ -35,38 +35,38 @@ public class PresentController {
     @Resource
     private TokenService tokenService;
 
-	@GetMapping("/all")
-	public Map<String, Object> getAllPresent() {
+    @GetMapping("/all")
+    public Map<String, Object> getAllPresent() {
 
-		List<PresentEntity> presentEntities = presentService.getPresentEntities();
-		return GsonUtil.buildMap(0, "success", presentEntities);
-	}
-
-
-	@GetMapping("/latest")
-	public Map<String, Object> getLatestPresentResult() {
-
-		List<PresentLatestResult> resultEntities = presentService.getLatestPresentResultEntities();
-		return GsonUtil.buildMap(0, "success", resultEntities);
-	}
+        List<PresentEntity> presentEntities = presentService.getPresentEntities();
+        return GsonUtil.buildMap(0, "success", presentEntities);
+    }
 
 
-	@GetMapping("/hot")
-	public Map<String, Object> getHotPresents() {
+    @GetMapping("/latest")
+    public Map<String, Object> getLatestPresentResult() {
 
-		List<PresentEntity> presentEntities = presentService.getHotPresentList();
-		return GsonUtil.buildMap(0, "success", presentEntities);
-	}
+        List<PresentLatestResult> resultEntities = presentService.getLatestPresentResultEntities();
+        return GsonUtil.buildMap(0, "success", resultEntities);
+    }
 
-	@GetMapping("/category/all")
-	public Map<String, Object> getAllPresentCategory() {
 
-		List<PresentCategorys> presentCategoryEntities = presentService.getPresentCategoryEntities();
-		return GsonUtil.buildMap(0, "success", presentCategoryEntities);
-	}
+    @GetMapping("/hot")
+    public Map<String, Object> getHotPresents() {
+
+        List<PresentEntity> presentEntities = presentService.getHotPresentList();
+        return GsonUtil.buildMap(0, "success", presentEntities);
+    }
+
+    @GetMapping("/category/all")
+    public Map<String, Object> getAllPresentCategory() {
+
+        List<PresentCategorys> presentCategoryEntities = presentService.getPresentCategoryEntities();
+        return GsonUtil.buildMap(0, "success", presentCategoryEntities);
+    }
 
     @GetMapping("/composite-hot")
-    public Map<String, Object> getHotProduct(@RequestHeader("Authorization") String token) {
+    public Map<String, Object> getHotProduct(@RequestHeader(value = "Authorization", required = false) String token) {
         MallUserEntity mallUserEntity = null;
         if (token != null && !"".equals(token.trim())) {
             mallUserEntity = tokenService.getMallUserEntity(token);
@@ -116,7 +116,7 @@ public class PresentController {
     }
 
     @GetMapping("/category/composite-all")
-    public Map<String, Object> getAllProductCategory(@RequestHeader("Authorization") String token) {
+    public Map<String, Object> getAllProductCategory(@RequestHeader(value = "Authorization", required = false) String token) {
         MallUserEntity mallUserEntity = null;
         if (token != null && !"".equals(token.trim())) {
             mallUserEntity = tokenService.getMallUserEntity(token);
