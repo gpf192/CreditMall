@@ -8,6 +8,7 @@ public class ExchangePrizeRespDTO {
     private String orderNo;
     private Integer useIntegral;
     private BigDecimal rechargeAmount;
+    private Integer availableIntegral;
 
     public Integer getStatus() {
         return status;
@@ -47,5 +48,13 @@ public class ExchangePrizeRespDTO {
 
     public void setRechargeAmount(BigDecimal rechargeAmount) {
         this.rechargeAmount = rechargeAmount;
+    }
+
+    public Integer getAvailableIntegral() {
+        return availableIntegral;
+    }
+
+    public void setAvailableIntegral(Integer availableIntegral) {
+        this.availableIntegral = availableIntegral;
     }
 }

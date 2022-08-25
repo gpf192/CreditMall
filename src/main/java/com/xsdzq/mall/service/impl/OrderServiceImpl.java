@@ -121,10 +121,10 @@ public class OrderServiceImpl implements OrderService {
 
         // 调用橙券话费直充接口
         MallOrderEntity updateOrder = callPayTel(order);
-
-        // 更新订单状态，解冻用户积分
+        CreditRecordEntity creditRecord = buildCreditRecord(updateOrder, user);
+        // 更新订单状态，解冻用户积分，记录积分使用记录
         try {
-            orderManager.update(updateOrder, updateUserInfo);
+            orderManager.update(updateOrder, updateUserInfo, creditRecord);
         } catch (Exception e) {
             logger.error("更新订单状态异常updateOrder:{},updateUserInfo:{}", JSON.toJSON(updateOrder), JSON.toJSON(updateUserInfo), e);
             updateOrder.setOrderStatus(OrderStatusEnum.PROCESSING.getCode());
@@ -132,6 +132,8 @@ public class OrderServiceImpl implements OrderService {
 
         epRespDTO.setOrderNo(order.getOrderNo());
         epRespDTO.setUseIntegral(order.getUseIntegral());
+        MallUserInfoEntity currentUserInfo = mallUserInfoRepository.findByClientId(user.getClientId());
+        epRespDTO.setAvailableIntegral(currentUserInfo.getCreditScore());
         epRespDTO.setStatus(getExchangeStatus(updateOrder.getOrderStatus()));
         epRespDTO.setRechargeAmount(order.getRechargeAmount());
         epRespDTO.setFailureReason(order.getRechargeMessage());
@@ -149,7 +151,8 @@ public class OrderServiceImpl implements OrderService {
             myExchangeRecordList = new ArrayList<>(orderEntityList.size());
             for (MallOrderEntity order : orderEntityList) {
                 MyExchangeRecordRespDTO mer = new MyExchangeRecordRespDTO();
-                mer.setGroupTime(DateUtil.getStandardMonthDate(order.getCreateTime()));
+                String tradeDate = order.getTradeDate().toString();
+                mer.setGroupTime(tradeDate.substring(0, 4) + "-" + tradeDate.substring(4, 6));
                 mer.setCreateTime(order.getCreateTime());
                 mer.setCompleteTime(order.getEndTime());
                 mer.setGoodsName(order.getGoodsName());
@@ -275,6 +278,23 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return exchangeStatus;
+    }
+
+    private CreditRecordEntity buildCreditRecord(MallOrderEntity order, MallUserEntity user) {
+        CreditRecordEntity credit = new CreditRecordEntity();
+        credit.setType(CreditRecordConst.REDUCESCORE);
+        credit.setReasonCode(CreditRecordConst.EXCHANGECARD);
+        credit.setReason(CreditRecordConst.EXCHANGECARDREASON);
+        credit.setItem(order.getGoodsName());
+        credit.setIntegralNumber(order.getUseIntegral());
+        String tradeDate = order.getTradeDate().toString();
+        credit.setDateFlag(tradeDate.substring(0, 4) + "-" + tradeDate.substring(4, 6) + "-" + tradeDate.substring(6, 8));
+        credit.setGroupTime(tradeDate.substring(0, 4) + "-" + tradeDate.substring(4, 6));
+        credit.setChangeType(CreditRecordConst.CHANGETYPE_COMPLETE);
+        credit.setRemindNumer(0);
+        credit.setRecordTime(order.getEndTime());
+        credit.setMallUserEntity(user);
+        return credit;
     }
 
 }

@@ -1,8 +1,10 @@
 package com.xsdzq.mall.manager;
 
 import com.xsdzq.mall.constants.OrderStatusEnum;
+import com.xsdzq.mall.dao.CreditRecordRepository;
 import com.xsdzq.mall.dao.MallUserInfoRepository;
 import com.xsdzq.mall.dao.OrderRepository;
+import com.xsdzq.mall.entity.CreditRecordEntity;
 import com.xsdzq.mall.entity.MallOrderEntity;
 import com.xsdzq.mall.entity.MallUserInfoEntity;
 import org.springframework.stereotype.Component;
@@ -17,6 +19,8 @@ public class OrderManager {
     private MallUserInfoRepository mallUserInfoRepository;
     @Resource
     private OrderRepository orderRepository;
+    @Resource
+    private CreditRecordRepository creditRecordRepository;
 
     @Transactional
     public void save(MallOrderEntity order, MallUserInfoEntity updateUserInfo) {
@@ -27,7 +31,7 @@ public class OrderManager {
     }
 
     @Transactional
-    public void update(MallOrderEntity updateOrder, MallUserInfoEntity updateUserInfo) {
+    public void update(MallOrderEntity updateOrder, MallUserInfoEntity updateUserInfo, CreditRecordEntity creditRecord) {
         int res;
         if (OrderStatusEnum.SUCCESS.getCode().equals(updateOrder.getOrderStatus())) {
             res = mallUserInfoRepository.reduceFrozenIntegral(updateUserInfo.getClientId(), updateUserInfo.getFrozenIntegral());
@@ -35,6 +39,8 @@ public class OrderManager {
 
             res = mallUserInfoRepository.reduceUsableIntegral(updateUserInfo.getClientId(), updateUserInfo.getFrozenIntegral());
             if (res != 1) throw new RuntimeException("减少可用积分失败");
+
+            creditRecordRepository.save(creditRecord);
         } else if (OrderStatusEnum.FAILURE.getCode().equals(updateOrder.getOrderStatus())) {
             res = mallUserInfoRepository.reduceFrozenIntegral(updateUserInfo.getClientId(), updateUserInfo.getFrozenIntegral());
             if (res != 1) throw new RuntimeException("减少冻结积分失败");
