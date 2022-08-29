@@ -22,10 +22,6 @@ public interface MallUserInfoRepository extends JpaRepository<MallUserInfoEntity
     @Modifying
     int reduceFrozenIntegral(String clientId, Integer frozenIntegral);
 
-    @Query(value = "update mall_user_info set credit_score=?2+credit_score where client_id=?1 and credit_score>=0", nativeQuery = true)
-    @Modifying
-    int addUsableIntegral(String clientId, Integer creditScore);
-
     @Query(value = "update mall_user_info set credit_score=credit_score-?2 where client_id=?1 and credit_score>=?2", nativeQuery = true)
     @Modifying
     int reduceUsableIntegral(String clientId, Integer creditScore);

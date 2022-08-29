@@ -30,4 +30,5 @@ public interface MallUserService {
 
 	public double getCurrentDayValue(MallUserEntity mallUserEntity, String nowDate);
 
+	public void handleRudeceCredit(MallUserEntity mallUserEntity, int reduceScore);
 }

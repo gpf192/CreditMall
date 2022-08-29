@@ -13,6 +13,7 @@ import com.xsdzq.mall.model.ExchangePrizeReqDTO;
 import com.xsdzq.mall.model.ExchangePrizeRespDTO;
 import com.xsdzq.mall.model.ExchangeRecordRespDTO;
 import com.xsdzq.mall.model.MyExchangeRecordRespDTO;
+import com.xsdzq.mall.service.MallUserService;
 import com.xsdzq.mall.service.OrderService;
 import com.xsdzq.mall.service.ProductService;
 import com.xsdzq.mall.service.client.chengquan.CommonRespEntity;
@@ -52,6 +53,8 @@ public class OrderServiceImpl implements OrderService {
     private DirectChargeService directChargeService;
     @Resource
     private OrderManager orderManager;
+    @Resource
+    private MallUserService mallUserService;
 
     @Override
     public List<ExchangeRecordRespDTO> getLatestExchangeRecord() {
@@ -106,6 +109,12 @@ public class OrderServiceImpl implements OrderService {
             throw new BusinessException("用户没有积分");
         } else if (userInfo.getCreditScore() < productService.getProductIntegral(product.getPrice())) {
             throw new BusinessException("用户积分不足");
+        }
+
+        double currentDayValue = mallUserService.getCurrentDayValue(user, DateUtil.getStandardDate(new Date()));
+        int dayValue = Double.valueOf(currentDayValue).intValue();
+        if(product.getOfficialPrice().compareTo(new BigDecimal(dayValue)) > 0){
+            throw new BusinessException("超过单日额度");
         }
 
         // 保存订单，冻结用户积分
@@ -202,9 +211,11 @@ public class OrderServiceImpl implements OrderService {
             // 系统异常
         } else if (commonResp.getCode() == 7777 || commonResp.getCode() == -1) {
             updateOrder.setOrderStatus(OrderStatusEnum.PROCESSING.getCode());
+            updateOrder.setRechargeStatus(ChengQuanOrderStatusEnum.RECHARGE.getCode());
             // 失败
         } else {
             updateOrder.setOrderStatus(OrderStatusEnum.FAILURE.getCode());
+            updateOrder.setRechargeStatus(ChengQuanOrderStatusEnum.FAILURE.getCode());
         }
         return updateOrder;
     }
