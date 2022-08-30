@@ -86,6 +86,8 @@ public class OrderServiceImpl implements OrderService {
                 epRespDTO.setOrderNo(order.getOrderNo());
                 epRespDTO.setUseIntegral(order.getUseIntegral());
                 epRespDTO.setRechargeAmount(order.getRechargeAmount());
+                MallUserInfoEntity currentUserInfo = mallUserInfoRepository.findByClientId(user.getClientId());
+                epRespDTO.setAvailableIntegral(currentUserInfo.getCreditScore());
             }
             return epRespDTO;
         }
@@ -153,7 +155,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(readOnly = true)
     public List<MyExchangeRecordRespDTO> getUserExchangeRecord(MallUserEntity mallUserEntity) {
         List<MyExchangeRecordRespDTO> myExchangeRecordList = Collections.emptyList();
-        PageRequest pageable = PageRequest.of(0, 2000);
+        PageRequest pageable = PageRequest.of(0, 5000);
         Page<MallOrderEntity> resultPage = orderRepository.findByClientIdOrderByCreateTimeDesc(mallUserEntity.getClientId(), pageable);
         List<MallOrderEntity> orderEntityList = resultPage.getContent();
         if (!CollectionUtils.isEmpty(orderEntityList)) {
