@@ -300,7 +300,7 @@ public class MallUserServiceImpl implements MallUserService {
 			if (mallUserInfoEntity.getCreditScore() - sumScore < 0) {
 				throw new BusinessException("积分不足！");
 			}
-			mallUserInfoEntity.setCreditScore(mallUserInfoEntity.getCreditScore() - sumScore);
+			mallUserInfoEntity.setCreditScore(mallUserInfoEntity.getCreditScore() + mallUserInfoEntity.getFrozenIntegral() - sumScore);
 			mallUserInfoRepository.save(mallUserInfoEntity);
 
 			// b.循环插记录
