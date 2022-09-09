@@ -2,6 +2,7 @@ package com.xsdzq.mall.controller;
 
 
 import com.xsdzq.mall.annotation.UserLoginToken;
+import com.xsdzq.mall.constants.ExchangeStatusEnum;
 import com.xsdzq.mall.constants.OrderStatusEnum;
 import com.xsdzq.mall.entity.CRMCreditProductViewEntity;
 import com.xsdzq.mall.entity.CreditRecordEntity;
@@ -78,7 +79,7 @@ public class CreditController {
 		if (!CollectionUtils.isEmpty(userExchangeRecord)) {
 			ResultNumber resultNumber = presentResult.getResultNumber();
 			for (MyExchangeRecordRespDTO mer : userExchangeRecord) {
-				if (OrderStatusEnum.SUCCESS.getCode().equals(mer.getStatus())) {
+				if (ExchangeStatusEnum.SUCCESS.getCode().equals(mer.getStatus())) {
 					if (mer.getUseIntegral() != null) {
 						resultNumber.setUsedScore(mer.getUseIntegral() + resultNumber.getUsedScore());
 					}
