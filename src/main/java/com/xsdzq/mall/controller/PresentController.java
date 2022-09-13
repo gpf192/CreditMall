@@ -1,5 +1,6 @@
 package com.xsdzq.mall.controller;
 
+import com.xsdzq.mall.constants.ExchangeTypeEnum;
 import com.xsdzq.mall.entity.MallUserEntity;
 import com.xsdzq.mall.entity.PresentEntity;
 import com.xsdzq.mall.model.*;
@@ -98,6 +99,7 @@ public class PresentController {
                     record.setClientId(result.getClientId());
                     record.setPrizeName(result.getPrizeName());
                     record.setEndTime(result.getRecordTime());
+                    record.setExchangeType(ExchangeTypeEnum.EXCHANGE.getCode());
                     recordQueue.add(record);
                 }
             }

@@ -68,6 +68,7 @@ public class OrderServiceImpl implements OrderService {
                 record.setClientId(t.getClientId());
                 record.setPrizeName(t.getGoodsName());
                 record.setEndTime(t.getEndTime());
+                record.setExchangeType(ExchangeTypeEnum.RECHARGE.getCode());
                 recordList.add(record);
             });
         }
@@ -143,8 +144,13 @@ public class OrderServiceImpl implements OrderService {
 
         epRespDTO.setOrderNo(order.getOrderNo());
         epRespDTO.setUseIntegral(order.getUseIntegral());
-        MallUserInfoEntity currentUserInfo = mallUserInfoRepository.findByClientId(user.getClientId());
-        epRespDTO.setAvailableIntegral(currentUserInfo.getCreditScore());
+        int availableIntegral;
+        if (OrderStatusEnum.FAILURE.getCode().equals(updateOrder.getOrderStatus())) {
+            availableIntegral = userInfo.getCreditScore();
+        } else {
+            availableIntegral = userInfo.getCreditScore() - productService.getProductIntegral(product.getPrice());
+        }
+        epRespDTO.setAvailableIntegral(availableIntegral);
         epRespDTO.setStatus(getExchangeStatus(updateOrder.getOrderStatus()));
         epRespDTO.setRechargeAmount(order.getRechargeAmount());
         epRespDTO.setFailureReason(order.getRechargeMessage());
@@ -297,7 +303,7 @@ public class OrderServiceImpl implements OrderService {
         CreditRecordEntity credit = new CreditRecordEntity();
         credit.setType(CreditRecordConst.REDUCESCORE);
         credit.setReasonCode(CreditRecordConst.EXCHANGECARD);
-        credit.setReason(CreditRecordConst.EXCHANGECARDREASON);
+        credit.setReason(CreditRecordConst.PREPAIDREFILLREASON);
         credit.setItem(order.getGoodsName());
         credit.setIntegralNumber(order.getUseIntegral());
         String tradeDate = order.getTradeDate().toString();

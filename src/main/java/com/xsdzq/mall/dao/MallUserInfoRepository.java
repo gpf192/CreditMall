@@ -5,9 +5,7 @@ import com.xsdzq.mall.entity.MallUserInfoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional(rollbackFor = Exception.class)
 public interface MallUserInfoRepository extends JpaRepository<MallUserInfoEntity, Long> {
 
     MallUserInfoEntity findByMallUserEntity(MallUserEntity mallUserEntity);

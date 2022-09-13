@@ -16,6 +16,7 @@ public interface CreditRecordConst {
 	// reason系列
 	String EXCHANGECARD = "10";
 	String EXCHANGECARDREASON = "兑换奖品";
+	String PREPAIDREFILLREASON = "话费充值";
 
 	String EXPIREDCARD = "11";
 	String EXPIREDCARDREASON = "已失效";

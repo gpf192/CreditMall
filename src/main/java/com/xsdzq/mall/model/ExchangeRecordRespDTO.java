@@ -9,6 +9,7 @@ public class ExchangeRecordRespDTO {
     private String prizeName;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date endTime;
+    private Integer exchangeType;
 
     public String getClientId() {
         return clientId;
@@ -32,5 +33,13 @@ public class ExchangeRecordRespDTO {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public Integer getExchangeType() {
+        return exchangeType;
+    }
+
+    public void setExchangeType(Integer exchangeType) {
+        this.exchangeType = exchangeType;
     }
 }
