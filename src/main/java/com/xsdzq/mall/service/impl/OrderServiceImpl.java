@@ -21,6 +21,7 @@ import com.xsdzq.mall.service.client.chengquan.DirectChargeService;
 import com.xsdzq.mall.service.client.chengquan.PayTelReqEntity;
 import com.xsdzq.mall.service.client.chengquan.PayTelRespEntity;
 import com.xsdzq.mall.util.DateUtil;
+import com.xsdzq.mall.util.PresentUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -65,7 +66,7 @@ public class OrderServiceImpl implements OrderService {
         if (!CollectionUtils.isEmpty(orderList)) {
             orderList.forEach(t -> {
                 ExchangeRecordRespDTO record = new ExchangeRecordRespDTO();
-                record.setClientId(t.getClientId());
+                record.setClientId(PresentUtil.getInstance().getSecretName(t.getClientId()));
                 record.setPrizeName(t.getGoodsName());
                 record.setEndTime(t.getEndTime());
                 record.setExchangeType(ExchangeTypeEnum.RECHARGE.getCode());
